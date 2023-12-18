@@ -1,6 +1,6 @@
 {
   "name": "websemaphore",
-  "version": "0.9.33",
+  "version": "0.9.34",
   "description": "The JavaScript/TypeScript client for WebSemaphore. Handle concurrency in the cloud with ease. https://www.websemaphore.com",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",

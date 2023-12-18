@@ -21,43 +21,43 @@ For usage instructions, please see [Usage](https://www.websemaphore.com/docs/v1/
     5.1 HTTP version 
         
     ```
-        import fetch from "node-fetch";
+    import fetch from "node-fetch";
 
-        export const websemaphoreManager = WebSemaphoreHttpClientManager({ logLevel: env.LOG_LEVEL });
+    export const websemaphoreManager = WebSemaphoreHttpClientManager({ logLevel: env.LOG_LEVEL });
 
-        export const websemaphoreClient = websemaphoreManager.initialize({ fetch, token: env.APIKEY });
+    export const websemaphoreClient = websemaphoreManager.initialize({ fetch, token: env.APIKEY });
 
-        
-        const initHandler = (...) => {
-            // ...
-            const resp = await websemaphoreClient.semaphore.acquire(SEMAPHORE_ID, msg as any);
-            // ...
-        }
+    
+    const initHandler = (...) => {
+        // ...
+        const resp = await websemaphoreClient.semaphore.acquire(SEMAPHORE_ID, msg as any);
+        // ...
+    }
 
-        const processingHandler = (...) => {
-            // ...
-            // do work
-            // ...
-            const resp = await websemaphoreClient.semaphore.release("test", { channelId: "default" });
-            // ...
-        }
+    const processingHandler = (...) => {
+        // ...
+        // do work
+        // ...
+        const resp = await websemaphoreClient.semaphore.release("test", { channelId: "default" });
+        // ...
+    }
     ```
     5.2 Websockets version:
     ```        
-        const main = () => {
-            const manager = WebSemaphoreWebsocketsClientManager({ websockets: WebSocket });
-            const client = await manager.connect(env.APIKEY);
+    const main = () => {
+        const manager = WebSemaphoreWebsocketsClientManager({ websockets: WebSocket });
+        const client = await manager.connect(env.APIKEY);
 
-            const { release, payload, status } =
-                await webSemaphoreClient.acquire({ semaphoreId: env.SEMAPHORE_ID, sync: false, body: { some: "abstract", data: 10 } });
+        const { release, payload, status } =
+            await webSemaphoreClient.acquire({ semaphoreId: env.SEMAPHORE_ID, sync: false, body: { some: "abstract", data: 10 } });
 
-            // ...
-            await process(payload, log);
-            // ...
-            release();
+        // ...
+        await process(payload, log);
+        // ...
+        release();
 
-            await manager.disconnect();
-        }
+        await manager.disconnect();
+    }
     ```
 
 ## Examples
