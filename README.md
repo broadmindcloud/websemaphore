@@ -45,7 +45,7 @@ For usage instructions, please see [Usage](https://www.websemaphore.com/docs/v1/
     5.2 Websockets version:
         `
         const main = () => {
-            const manager = WebSemaphoreWebsocketsClientManager({ websockets: WebSocket as any, logLevel: "ALL" });
+            const manager = WebSemaphoreWebsocketsClientManager({ websockets: WebSocket });
             const client = await manager.connect(env.APIKEY);
 
             const { release, payload, status } =
