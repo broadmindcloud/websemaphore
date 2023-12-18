@@ -18,7 +18,8 @@ For usage instructions, please see [Usage](https://www.websemaphore.com/docs/v1/
 4. Install this library: `npm i --save websemaphore`
 5. Use in code
     5.1 HTTP version 
-        ```
+        
+    ```
         import fetch from "node-fetch";
 
         export const websemaphoreManager = WebSemaphoreHttpClientManager({ logLevel: env.LOG_LEVEL });
@@ -41,7 +42,7 @@ For usage instructions, please see [Usage](https://www.websemaphore.com/docs/v1/
         }
 
     5.2 Websockets version:
-        ```        
+    ```        
         const main = () => {
             const manager = WebSemaphoreWebsocketsClientManager({ websockets: WebSocket });
             const client = await manager.connect(env.APIKEY);
