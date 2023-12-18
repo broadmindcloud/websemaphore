@@ -22,7 +22,7 @@ For usage instructions, please see [Usage](https://www.websemaphore.com/docs/v1/
         ```
         import fetch from "node-fetch";
         import fetch from "node-fetch";
-        const chainstreamClient = chainstreamManager.initialize("fetch);
+        const chainstreamClient = chainstreamManager.initialize("fetch");
 
         const initHandler = (...) => {
             // ...

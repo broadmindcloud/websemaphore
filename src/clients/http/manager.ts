@@ -19,7 +19,7 @@ export const WebSemaphoreHttpClientManager = (params?: {  baseUrl?: string, toke
       console.log("WebSemaphoreHttpClientManager", ...args)
   }
 
-  const initialize = (params?: { baseUrl?: string, fetch?: any }) => {
+  const initialize = (params?: { baseUrl?: string, fetch?: any, token?: string }) => {
     let { baseUrl, fetch: customFetch } = params || {};
     baseUrl = baseUrl || "prod";
     if (ChainstreamBaseUrls[baseUrl])
@@ -37,6 +37,10 @@ export const WebSemaphoreHttpClientManager = (params?: {  baseUrl?: string, toke
         return fetch(...args)
       })
     });
+
+    if(params?.token)
+      client.setSecurityData({ token: params.token })
+
     return client;
   };
 
