@@ -40,7 +40,7 @@ For usage instructions, please see [Usage](https://www.websemaphore.com/docs/v1/
             const resp = await websemaphoreClient.semaphore.release("test", { channelId: "default" });
             // ...
         }
-
+    ```
     5.2 Websockets version:
     ```        
         const main = () => {
@@ -57,6 +57,7 @@ For usage instructions, please see [Usage](https://www.websemaphore.com/docs/v1/
 
             await manager.disconnect();
         }
+    ```
 
 ## Examples
 See reference examples in the [websemaphore-examples](https://github.com/broadmindcloud/websemaphore-examples) repo.
