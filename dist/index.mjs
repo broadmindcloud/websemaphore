@@ -12,10 +12,10 @@ class C {
       "application/json": (e) => e !== null && (typeof e == "object" || typeof e == "string") ? JSON.stringify(e) : e,
       "text/plain": (e) => e !== null && typeof e != "string" ? JSON.stringify(e) : e,
       "multipart/form-data": (e) => Object.keys(e || {}).reduce((s, l) => {
-        const a = e[l];
+        const n = e[l];
         return s.append(
           l,
-          a instanceof Blob ? a : typeof a == "object" && a !== null ? JSON.stringify(a) : `${a}`
+          n instanceof Blob ? n : typeof n == "object" && n !== null ? JSON.stringify(n) : `${n}`
         ), s;
       }, new FormData()),
       "application/x-www-form-urlencoded": (e) => this.toQueryString(e)
@@ -33,30 +33,30 @@ class C {
       body: e,
       secure: s,
       path: l,
-      type: a,
+      type: n,
       query: p,
       format: u,
-      baseUrl: n,
-      cancelToken: i,
+      baseUrl: i,
+      cancelToken: a,
       ...h
     }) => {
       const c = (typeof s == "boolean" ? s : this.baseApiParams.secure) && this.securityWorker && await this.securityWorker(this.securityData) || {}, y = this.mergeRequestParams(h, c), f = p && this.toQueryString(p), m = this.contentFormatters[
-        a || "application/json"
+        n || "application/json"
         /* Json */
       ], v = u || y.format;
-      return console.log("Fetching: ", `${n || this.baseUrl || ""}${l}${f ? `?${f}` : ""}`), console.log("Headers: ", `${JSON.stringify(y.headers)}`), console.log("Body: ", `${JSON.stringify(e)}`), this.customFetch(`${n || this.baseUrl || ""}${l}${f ? `?${f}` : ""}`, {
+      return console.log("Fetching: ", `${i || this.baseUrl || ""}${l}${f ? `?${f}` : ""}`), console.log("Headers: ", `${JSON.stringify(y.headers)}`), console.log("Body: ", `${JSON.stringify(e)}`), this.customFetch(`${i || this.baseUrl || ""}${l}${f ? `?${f}` : ""}`, {
         ...y,
         headers: {
           ...y.headers || {},
-          ...a && a !== "multipart/form-data" ? { "Content-Type": a } : {}
+          ...n && n !== "multipart/form-data" ? { "Content-Type": n } : {}
         },
-        signal: i ? this.createAbortSignal(i) : y.signal,
+        signal: a ? this.createAbortSignal(a) : y.signal,
         body: typeof e > "u" || e === null ? null : m(e)
       }).then(async (r) => {
         const g = r;
         g.data = null, g.error = null;
         const b = v ? await r[v]().then((d) => (g.ok ? g.data = d : g.error = d, g)).catch((d) => (g.error = d, g)) : g;
-        if (i && this.abortControllers.delete(i), !r.ok)
+        if (a && this.abortControllers.delete(a), !r.ok)
           throw b;
         return b;
       });
@@ -727,30 +727,30 @@ const j = {
   prod: "https://api.websemaphore.com/v1"
 }, W = (o) => {
   let t, e = (o == null ? void 0 : o.token) || "";
-  const s = (...a) => {
-    o != null && o.logLevel && console.log("WebSemaphoreHttpClientManager", ...a);
+  const s = (...n) => {
+    o != null && o.logLevel && console.log("WebSemaphoreHttpClientManager", ...n);
   };
   return {
-    initialize: (a) => {
-      let { baseUrl: p, fetch: u } = a || {};
+    initialize: (n) => {
+      let { baseUrl: p, fetch: u } = n || {};
       return p = p || "prod", j[p] && (p = j[p]), s(p), t = new E({
         baseUrl: p,
-        securityWorker: (n) => n ? { headers: { Authorization: n.token } } : {},
-        customFetch: u || ((...n) => fetch(...n))
-      }), t;
+        securityWorker: (i) => i ? { headers: { Authorization: i.token } } : {},
+        customFetch: u || ((...i) => fetch(...i))
+      }), n != null && n.token && t.setSecurityData({ token: n.token }), t;
     },
     getCurrentToken() {
       return e;
     },
-    updateToken(a) {
-      e = a, t.setSecurityData({ token: a });
+    updateToken(n) {
+      e = n, t.setSecurityData({ token: n });
     },
     async authorize() {
       try {
-        const a = await t.user.current();
-        return s(`Logged in with ${a.data.id}`), a.data;
-      } catch (a) {
-        throw a;
+        const n = await t.user.current();
+        return s(`Logged in with ${n.data.id}`), n.data;
+      } catch (n) {
+        throw n;
       }
     }
   };
@@ -764,30 +764,30 @@ var O = { exports: {} };
   function s() {
   }
   Object.create && (s.prototype = /* @__PURE__ */ Object.create(null), new s().__proto__ || (e = !1));
-  function l(n, i, h) {
-    this.fn = n, this.context = i, this.once = h || !1;
+  function l(i, a, h) {
+    this.fn = i, this.context = a, this.once = h || !1;
   }
-  function a(n, i, h, c, y) {
+  function n(i, a, h, c, y) {
     if (typeof h != "function")
       throw new TypeError("The listener must be a function");
-    var f = new l(h, c || n, y), m = e ? e + i : i;
-    return n._events[m] ? n._events[m].fn ? n._events[m] = [n._events[m], f] : n._events[m].push(f) : (n._events[m] = f, n._eventsCount++), n;
+    var f = new l(h, c || i, y), m = e ? e + a : a;
+    return i._events[m] ? i._events[m].fn ? i._events[m] = [i._events[m], f] : i._events[m].push(f) : (i._events[m] = f, i._eventsCount++), i;
   }
-  function p(n, i) {
-    --n._eventsCount === 0 ? n._events = new s() : delete n._events[i];
+  function p(i, a) {
+    --i._eventsCount === 0 ? i._events = new s() : delete i._events[a];
   }
   function u() {
     this._events = new s(), this._eventsCount = 0;
   }
   u.prototype.eventNames = function() {
-    var i = [], h, c;
+    var a = [], h, c;
     if (this._eventsCount === 0)
-      return i;
+      return a;
     for (c in h = this._events)
-      t.call(h, c) && i.push(e ? c.slice(1) : c);
-    return Object.getOwnPropertySymbols ? i.concat(Object.getOwnPropertySymbols(h)) : i;
-  }, u.prototype.listeners = function(i) {
-    var h = e ? e + i : i, c = this._events[h];
+      t.call(h, c) && a.push(e ? c.slice(1) : c);
+    return Object.getOwnPropertySymbols ? a.concat(Object.getOwnPropertySymbols(h)) : a;
+  }, u.prototype.listeners = function(a) {
+    var h = e ? e + a : a, c = this._events[h];
     if (!c)
       return [];
     if (c.fn)
@@ -795,16 +795,16 @@ var O = { exports: {} };
     for (var y = 0, f = c.length, m = new Array(f); y < f; y++)
       m[y] = c[y].fn;
     return m;
-  }, u.prototype.listenerCount = function(i) {
-    var h = e ? e + i : i, c = this._events[h];
+  }, u.prototype.listenerCount = function(a) {
+    var h = e ? e + a : a, c = this._events[h];
     return c ? c.fn ? 1 : c.length : 0;
-  }, u.prototype.emit = function(i, h, c, y, f, m) {
-    var v = e ? e + i : i;
+  }, u.prototype.emit = function(a, h, c, y, f, m) {
+    var v = e ? e + a : a;
     if (!this._events[v])
       return !1;
     var r = this._events[v], g = arguments.length, b, d;
     if (r.fn) {
-      switch (r.once && this.removeListener(i, r.fn, void 0, !0), g) {
+      switch (r.once && this.removeListener(a, r.fn, void 0, !0), g) {
         case 1:
           return r.fn.call(r.context), !0;
         case 2:
@@ -824,7 +824,7 @@ var O = { exports: {} };
     } else {
       var k = r.length, w;
       for (d = 0; d < k; d++)
-        switch (r[d].once && this.removeListener(i, r[d].fn, void 0, !0), g) {
+        switch (r[d].once && this.removeListener(a, r[d].fn, void 0, !0), g) {
           case 1:
             r[d].fn.call(r[d].context);
             break;
@@ -845,12 +845,12 @@ var O = { exports: {} };
         }
     }
     return !0;
-  }, u.prototype.on = function(i, h, c) {
-    return a(this, i, h, c, !1);
-  }, u.prototype.once = function(i, h, c) {
-    return a(this, i, h, c, !0);
-  }, u.prototype.removeListener = function(i, h, c, y) {
-    var f = e ? e + i : i;
+  }, u.prototype.on = function(a, h, c) {
+    return n(this, a, h, c, !1);
+  }, u.prototype.once = function(a, h, c) {
+    return n(this, a, h, c, !0);
+  }, u.prototype.removeListener = function(a, h, c, y) {
+    var f = e ? e + a : a;
     if (!this._events[f])
       return this;
     if (!h)
@@ -864,9 +864,9 @@ var O = { exports: {} };
       r.length ? this._events[f] = r.length === 1 ? r[0] : r : p(this, f);
     }
     return this;
-  }, u.prototype.removeAllListeners = function(i) {
+  }, u.prototype.removeAllListeners = function(a) {
     var h;
-    return i ? (h = e ? e + i : i, this._events[h] && p(this, h)) : (this._events = new s(), this._eventsCount = 0), this;
+    return a ? (h = e ? e + a : a, this._events[h] && p(this, h)) : (this._events = new s(), this._eventsCount = 0), this;
   }, u.prototype.off = u.prototype.removeListener, u.prototype.addListener = u.prototype.on, u.prefixed = e, u.EventEmitter = u, o.exports = u;
 })(O);
 var L = O.exports;
@@ -910,7 +910,7 @@ class N extends _ {
     t.data === "pong" && (this.pingCounter--, this.log("pong, pingCounter == ", this.pingCounter, (/* @__PURE__ */ new Date()).toISOString()));
   }
   logError(t) {
-    console.log(t);
+    this.log(t);
   }
   addEventListeners() {
     if (!this.socket)
@@ -944,10 +944,10 @@ class N extends _ {
     this.stopPing(), !this.noReconnect && this.token ? this.toggle(this.token) : this.removeEventListeners(), this.noReconnect = !1;
   }
   async toggle(t = "") {
-    var l, a;
+    var l, n;
     this.token = t;
     const e = this.upd(this.url, this.token), s = !t;
-    if (this.log("Websemaphore Websockets connection is toggling", s ? "off" : "on"), !(this.url === e && t == this.token && ((l = this.socket) == null ? void 0 : l.readyState) === ((a = this.socket) == null ? void 0 : a.OPEN)))
+    if (this.log("Websemaphore Websockets connection is toggling", s ? "off" : "on"), !(this.url === e && t == this.token && ((l = this.socket) == null ? void 0 : l.readyState) === ((n = this.socket) == null ? void 0 : n.OPEN)))
       return this.url = e, s && await this.flush(), this.socket ? this.socket.close() : (this.socket = new this.WSImplementation(this.url), this.addEventListeners()), Promise.resolve();
   }
   send(t) {
@@ -964,14 +964,14 @@ class N extends _ {
     const l = this.outboundQueue || [];
     for (this.log("Flushing outbound queue has items:", l.length); l.length; )
       this.send(l.pop());
-    const a = () => {
+    const n = () => {
       if (this.log("Flushing #", s++), !this.isConnected())
         return t.resolve();
       (e == null ? void 0 : e.bufferedAmount) ? (this.log("Items in buffer #", s++), setTimeout(() => {
-        a();
+        n();
       }, 500)) : (this.log("ResolveWhenDone Done"), t.resolve());
     };
-    return a(), t;
+    return n(), t;
   }
   // Rest of your code...
 }
@@ -987,8 +987,8 @@ class $ {
     });
   }
   acquire({ semaphoreId: t, channelId: e, sync: s, body: l }) {
-    let a = 0;
-    const p = Date.now().toString() + "-" + a++;
+    let n = 0;
+    const p = Date.now().toString() + "-" + n++;
     this.wsClient.send({
       action: s ? "lock.acquireSync" : "lock.acquire",
       payload: JSON.stringify({
@@ -1005,9 +1005,9 @@ class $ {
       release: () => {
         throw new Error("Cannot call release before the lock is acquired or rejected");
       }
-    }, u.then((n) => ({
-      status: n.status,
-      payload: n.payload,
+    }, u.then((i) => ({
+      status: i.status,
+      payload: i.payload,
       release: () => this.release({ semaphoreId: t, channelId: e, messageId: p })
     }));
   }
@@ -1052,14 +1052,15 @@ const x = (o) => {
   let s = new $({ wsClient: e, logLevel: o == null ? void 0 : o.logLevel });
   return {
     connect: async (p) => {
-      if (!p)
+      if (!p || !p.replace(/^ApiKey./, ""))
         throw new Error("Couln't connect (did you pass a token?)");
       const u = S();
-      if (e.toggle(p), !e.socket)
+      if (await e.toggle(p), !e.socket)
         throw new Error("Websocket was not created, the provided implementation might be incompatible.");
-      return e.socket.addEventListener && e.socket.addEventListener("error", (n) => {
-        o != null && o.logLevel && console.log("Couldn't connect, aborted...", n), u.reject(n);
-      }), e.socket.addEventListener("open", (n) => {
+      return e.socket.addEventListener && e.socket.addEventListener("error", (i) => {
+        debugger;
+        o != null && o.logLevel && console.log("Couldn't connect, aborted...", i), u.reject(i);
+      }), e.socket.addEventListener("open", (i) => {
         o != null && o.logLevel && console.log("Connected..."), u.resolve(s);
       }), u;
     },

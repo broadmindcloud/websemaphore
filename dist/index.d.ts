@@ -812,6 +812,7 @@ export declare const WebSemaphoreHttpClientManager: (params?: {
     initialize: (params?: {
         baseUrl?: string;
         fetch?: any;
+        token?: string;
     }) => WebsemaphoreHttpClient;
     getCurrentToken(): string;
     updateToken(token: string): void;

@@ -21,24 +21,42 @@ For usage instructions, please see [Usage](https://www.websemaphore.com/docs/v1/
     
         ```
         import fetch from "node-fetch";
-        import fetch from "node-fetch";
-        const chainstreamClient = chainstreamManager.initialize("fetch");
 
+        export const websemaphoreManager = WebSemaphoreHttpClientManager({ logLevel: env.LOG_LEVEL });
+
+        export const websemaphoreClient = websemaphoreManager.initialize({ fetch, token: env.APIKEY });
+
+        
         const initHandler = (...) => {
             // ...
-            const resp = await chainstreamClient.semaphore.acquire(SEMAPHORE_ID, msg as any);
+            const resp = await websemaphoreClient.semaphore.acquire(SEMAPHORE_ID, msg as any);
             // ...
         }
 
         const processingHandler = (...) => {
             // ...
             // do work
-            const resp = await chainstreamClient.semaphore.release(SEMAPHORE_ID);
+            // ...
+            const resp = await websemaphoreClient.semaphore.release("test", { channelId: "default" });
             // ...
         }
         ```
 
     5.2 Websockets version:
-        `` 
+        `
+        const main = () => {
+            const manager = WebSemaphoreWebsocketsClientManager({ websockets: WebSocket as any, logLevel: "ALL" });
+            const client = await manager.connect(env.APIKEY);
+
+            const { release, payload, status } =
+                await webSemaphoreClient.acquire({ semaphoreId: env.SEMAPHORE_ID, sync: false, body: { some: "abstract", data: 10 } });
+
+            // ...
+            await process(payload, log);
+            // ...
+            release();
+
+            await manager.disconnect();
+        }
 
 
