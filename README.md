@@ -18,7 +18,6 @@ For usage instructions, please see [Usage](https://www.websemaphore.com/docs/v1/
 4. Install this library: `npm i --save websemaphore`
 5. Use in code
     5.1 HTTP version 
-    
         ```
         import fetch from "node-fetch";
 
@@ -40,10 +39,9 @@ For usage instructions, please see [Usage](https://www.websemaphore.com/docs/v1/
             const resp = await websemaphoreClient.semaphore.release("test", { channelId: "default" });
             // ...
         }
-        ```
 
     5.2 Websockets version:
-        `
+        ```        
         const main = () => {
             const manager = WebSemaphoreWebsocketsClientManager({ websockets: WebSocket });
             const client = await manager.connect(env.APIKEY);
