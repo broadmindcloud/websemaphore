@@ -17,6 +17,7 @@ For usage instructions, please see [Usage](https://www.websemaphore.com/docs/v1/
 3. Create an Api Key
 4. Install this library: `npm i --save websemaphore`
 5. Use in code
+
     5.1 HTTP version 
         
     ```
