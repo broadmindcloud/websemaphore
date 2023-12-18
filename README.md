@@ -59,4 +59,5 @@ For usage instructions, please see [Usage](https://www.websemaphore.com/docs/v1/
             await manager.disconnect();
         }
 
-
+## Examples
+See reference examples in the [websemaphore-examples](https://github.com/broadmindcloud/websemaphore-examples) repo.
