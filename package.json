@@ -1,6 +1,6 @@
 {
   "name": "websemaphore",
-  "version": "0.9.34",
+  "version": "0.9.35",
   "description": "The JavaScript/TypeScript client for WebSemaphore. Handle concurrency in the cloud with ease. https://www.websemaphore.com",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -19,7 +19,9 @@
     "webhook",
     "websemaphore",
     "cloud semaphore",
-    "web semaphore"
+    "web semaphore",
+    "mutex",
+    "lock"
   ],
   "author": "Igor Rubinovich <igor.rubinovich@websemaphore.com>",
   "license": "ISC",
