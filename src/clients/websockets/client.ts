@@ -16,10 +16,11 @@ export class WebSemaphoreWebsocketsClient {
     inFlight: Record<string, CacheItem>;
     history: string[];
   };
-  public logLevel: "" | "ALL" = "";
+  public logLevel: LogLevel = "";
 
   constructor(opts: ApiConstructorParams) {
     this.wsClient = opts.wsClient;
+    this.logLevel = opts.logLevel || this.logLevel;
     // this.ws = opts?.ws || (typeof globalThis !== "undefined" ? (globalThis as any).WebSocket : null);
 
     if (!this.wsClient) {
@@ -77,9 +78,8 @@ export class WebSemaphoreWebsocketsClient {
   private _processIncoming(msg: string) {
     this.log("Got a message from WebSemaphore", msg);
     const o = JSON.parse(msg) as AcquireResponse;
-    if (o.type === "lock") {
-      const event = o.event;
-
+    const event = o.event;
+    if (o.type === "lock" && (event == "acquired")) {
       const cached = this.cache.inFlight[o.payload.id];
 
       cached.promise.resolve({

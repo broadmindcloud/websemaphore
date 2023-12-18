@@ -1,5 +1,5 @@
 import { EventEmitter } from "eventemitter3";
-import { UpdateClientConfig, WebSocketImplementation } from "../../types";
+import { LogLevel, UpdateClientConfig, WebSocketImplementation } from "../../types";
 import { DelayedPromise } from "../../utils";
 // impoer { WebSocket}
 export const ChainstreamWebsocketsServers: Record<string, string> = {
@@ -17,9 +17,12 @@ export class WebSemaphoreWebsocketsTransportClient extends EventEmitter {
     private noReconnect: boolean = false;
     private upd: UpdateClientConfig;
     private WSImplementation: WebSocketImplementation;
-    public logLevel: "" | "ALL" = "";
+    public logLevel: LogLevel = "";
 
-    constructor(upd: UpdateClientConfig, opts?: { websockets?: WebSocketImplementation, url?: "", env?: "" }) {
+    constructor(
+        upd: UpdateClientConfig,
+        opts?: { websockets?: WebSocketImplementation, url?: "", env?: "", logLevel?: LogLevel }
+    ) {
         super();
 
         const websockets = opts?.websockets ? opts.websockets : (globalThis as any).WebSocket;
@@ -35,6 +38,8 @@ export class WebSemaphoreWebsocketsTransportClient extends EventEmitter {
 
         this.toggle = this.toggle.bind(this);
         this.send = this.send.bind(this);
+
+        this.logLevel = this.logLevel
 
         if (!websockets) {
             throw new Error("No websockets implementation provided or available natively");

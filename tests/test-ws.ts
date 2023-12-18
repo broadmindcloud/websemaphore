@@ -1,10 +1,12 @@
-const API_KEY = ""; // add a valid API key here
+const API_KEY = "52b66ce3f87da2b70e0c023c48b96b81"; // add a valid API key here
+
+const TOKEN = `ApiKey ${API_KEY}`;
 
 import { WebSemaphoreWebsocketsClientManager } from "../src/clients/websockets/manager";
 import { WebSocket as WS } from "ws";
 import { WebSocketImplementation } from "../src/types";
 
-const manager = WebSemaphoreWebsocketsClientManager({ websockets: WS as any as WebSocketImplementation });
+const manager = WebSemaphoreWebsocketsClientManager({ logLevel: "ALL", websockets: WS as any as WebSocketImplementation });
 
 const process = async (payload: any) => {
     // do work
@@ -14,7 +16,9 @@ const process = async (payload: any) => {
 const main = async () => {
     debugger;
 
-    const client = await manager.connect(`ApiKey ${API_KEY}`);
+    console.log("connecting...")
+
+    const client = await manager.connect(TOKEN);
 
     console.log("acquiring...")
 
@@ -39,7 +43,7 @@ const main = async () => {
         console.log("WebSemaphore over Websodckets test ok");
 
     } catch (e) {
-        // console.error((e as any).message);
+        console.error((e as any).message);
     }
 }
 

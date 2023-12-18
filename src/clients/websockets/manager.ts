@@ -7,7 +7,7 @@ export const WebSemaphoreWebsocketsClientManager = (opts?: { websockets?: WebSoc
     const wsImpl: WebSocketImplementation = opts?.websockets ? opts.websockets : (globalThis as any).WebSocket;
     const wsClient = new WebSemaphoreWebsocketsTransportClient(
         (wsServer: string, token: string) => `${wsServer}?token=${encodeURIComponent(token)}`,
-        { websockets: wsImpl }
+        { websockets: wsImpl, logLevel: opts?.logLevel }
     );
 
     let chainstreamWebsocketsClient = new WebSemaphoreWebsocketsClient({ wsClient: wsClient, logLevel: opts?.logLevel })

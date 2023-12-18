@@ -21,11 +21,12 @@ For usage instructions, please see [Usage](https://www.websemaphore.com/docs/v1/
     5.1 HTTP version 
         
     ```
+    import { WebSemaphoreHttpClientManager } from "websemaphore";
     import fetch from "node-fetch";
 
-    const websemaphoreManager = WebSemaphoreHttpClientManager({ logLevel: env.LOG_LEVEL });
+    const websemaphoreManager = WebSemaphoreHttpClientManager();
 
-    const websemaphoreClient = websemaphoreManager.initialize({ fetch, token: env.APIKEY });
+    const websemaphoreClient = websemaphoreManager.initialize({ fetch, token: APIKEY });
 
     
     const initHandler = (...) => {
@@ -38,17 +39,19 @@ For usage instructions, please see [Usage](https://www.websemaphore.com/docs/v1/
         // ...
         // do work
         // ...
-        const resp = await websemaphoreClient.semaphore.release("test", { channelId: "default" });
+        const resp = await websemaphoreClient.semaphore.release(SEMAPHORE_ID, { channelId: "default" });
         // ...
     }
     ```
     5.2 Websockets version:
     ```        
+    import { WebSemaphoreWebsocketsClientManager } from "websemaphore";
+
     const manager = WebSemaphoreWebsocketsClientManager({ websockets: WebSocket });
-    const client = await manager.connect(env.APIKEY);
+    const client = await manager.connect(APIKEY);
 
     const { release, payload, status } =
-        await webSemaphoreClient.acquire({ semaphoreId: env.SEMAPHORE_ID, sync: false, body: { some: "abstract", data: 10 } });
+        await webSemaphoreClient.acquire({ semaphoreId: SEMAPHORE_ID, sync: false, body: { some: "abstract", data: 10 } });
 
     // ...
     await process(payload, log);
