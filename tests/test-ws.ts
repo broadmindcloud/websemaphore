@@ -1,4 +1,4 @@
-const API_KEY = ""; // add a valid API key here
+const API_KEY = "460a169e52a92dff1271ccf60581e01d"; // add a valid API key here
 
 const TOKEN = `ApiKey ${API_KEY}`;
 

@@ -26,7 +26,7 @@ export const WebSemaphoreWebsocketsClientManager = (opts?: { websockets?: WebSoc
         wsClient.socket.addEventListener &&
             wsClient.socket
                 .addEventListener("error", (ev: any) => {
-                    debugger;
+                    // debugger;
                     opts?.logLevel && console.log("Couldn't connect, aborted...", ev);
                     // chainstreamWebsocketsClient.setClient(chainstreamWebsocketsClient);
                     connectPromise.reject(ev)

@@ -52,7 +52,7 @@ export class WebSemaphoreWebsocketsTransportClient extends EventEmitter {
     }
 
     isConnected() {
-        debugger;
+        // debugger;
         this.log("Ready state: ", this.socket?.readyState);
         return this.socket && (this.socket.readyState === this.socket.OPEN);
     }

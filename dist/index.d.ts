@@ -822,7 +822,7 @@ export declare const WebSemaphoreHttpClientManager: (params?: {
 export declare class WebSemaphoreWebsocketsClient {
     private wsClient;
     private cache;
-    logLevel: "" | "ALL";
+    logLevel: LogLevel;
     constructor(opts: ApiConstructorParams);
     acquire<T>({ semaphoreId, channelId, sync, body }: AcquireParams): Promise<{
         status: LockRequestStatus;
@@ -860,11 +860,12 @@ declare class WebSemaphoreWebsocketsTransportClient extends EventEmitter {
     private noReconnect;
     private upd;
     private WSImplementation;
-    logLevel: "" | "ALL";
+    logLevel: LogLevel;
     constructor(upd: UpdateClientConfig, opts?: {
         websockets?: WebSocketImplementation;
         url?: "";
         env?: "";
+        logLevel?: LogLevel;
     });
     private log;
     isConnected(): boolean | null;
