@@ -6,6 +6,8 @@ export class WebsemaphoreHttpClient extends Api<{ token: string }> { }
 export const ChainstreamBaseUrls: Record<string, string> = {
   "dev": "https://api-eu-dev.websemaphore.com/v1",
   "prod": "https://api.websemaphore.com/v1",
+  "us-dev": "api-us-dev.websemaphore.com/v1", //"https://api-eu-dev.websemaphore.com/v1",
+  "us-prod": "https://api.websemaphore.com/v1",
 };
 
 // const baseUrl = newlifeBaseUrl; //"https://api-eu-sit.newlife.io/creator";
