@@ -31,7 +31,7 @@ const main = async () => {
             // do work
             await process(payload);
         } else {
-
+            
         }
 
         console.log("releasing...");

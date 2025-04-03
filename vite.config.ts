@@ -14,7 +14,7 @@ export default defineConfig({
       formats: ["es",'cjs','umd'],
       fileName: "index"
     },
-    // sourcemap: 'inline',
+    sourcemap: 'inline',
     // rollupOptions: {
     //   // external: ['react'],
     //   output: {

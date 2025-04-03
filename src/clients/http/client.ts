@@ -22,13 +22,6 @@ export interface UserUpdateRequest {
   /** @default "" */
   ticket?: string;
   ownerScopes?: string[];
-  subscription?: {
-    expires?: string;
-    provider?: string;
-    active?: boolean;
-    subscriptionId?: string;
-    providerUserId?: string;
-  };
   /** @default "" */
   firstName?: string;
   phone?: string;
@@ -53,13 +46,6 @@ export interface UserCreateRequest {
   /** @default "" */
   ticket?: string;
   ownerScopes?: string[];
-  subscription?: {
-    expires?: string;
-    provider?: string;
-    active?: boolean;
-    subscriptionId?: string;
-    providerUserId?: string;
-  };
   /** @default "" */
   firstName?: string;
   password?: string;
@@ -85,13 +71,6 @@ export interface UserReadResponse {
   /** @default "" */
   ticket?: string;
   ownerScopes?: string[];
-  subscription?: {
-    expires?: string;
-    provider?: string;
-    active?: boolean;
-    subscriptionId?: string;
-    providerUserId?: string;
-  };
   /** @default "" */
   firstName?: string;
   phone?: string;
@@ -117,108 +96,16 @@ export interface IdSessionTokenRequest {
   id: string;
 }
 
-export type StripeCheckoutSessionCreateResponse = object;
-
-export interface StripeCheckoutSessionCreateRequest {
-  paymentMethodId: string;
-  customerId: string;
-  priceId?: string;
-}
-
-/** SemaphoreSyncLockResponse Model */
 export interface SemaphoreSyncLockResponse {
   semaphoreId: string;
   success?: boolean;
   channelId?: string;
 }
 
-/** SemaphoreJobReadResponse Model */
-export interface SemaphoreJobReadResponse {
-  created?: string;
-  messageId?: string;
-  error?: string;
-  timer?: {
-    crn?: string;
-  };
-  deleted?: boolean;
-  payload?: object;
-  meta?: {
-    routing?: {
-      protocol?: string;
-      url?: string;
-      remoteId?: string;
-    };
-  };
-  semaphore?: {
-    owner?: string;
-    mapping?: {
-      canOverrideRouting?: boolean;
-      handler?: string;
-      inputData?: string;
-      maxExecutionTime?: number;
-      language?: string;
-      isActive?: boolean;
-    };
-    maxValue?: number;
-    created?: string;
-    title?: string;
-    isActive?: boolean;
-    timeout?: {
-      value?: number;
-      since?: string;
-    };
-    meta?: {
-      jobCrnInjectionPoint?: string;
-    };
-    websemaphore?: {
-      channelCrn?: string;
-      release?: boolean;
-      isActive?: boolean;
-    };
-    callback?: {
-      protocol?: string;
-      address?: string;
-      method?: string;
-      onDeliveryError?: string;
-      isActive?: boolean;
-    };
-    id?: string;
-    updated?: string;
-    maxValueScope?: string;
-    websockets?: {
-      onClientDropped?: string;
-      isActive?: boolean;
-      allowContinuedSessions?: boolean;
-    };
-  };
-  attributes?: {
-    DeadLetterQueueSourceArn?: string;
-    AWSTraceHeader?: string;
-    ApproximateReceiveCount?: string;
-    SentTimestamp?: string;
-    SequenceNumber?: string;
-    messageId?: string;
-    MessageGroupId?: string;
-    SenderId?: string;
-    MessageDeduplicationId?: string;
-    ApproximateFirstReceiveTimestamp?: string;
-  };
-  updated?: string;
-  crn?: string;
-  lastStatus?: string;
-  channelId?: string;
-  status?: string;
-}
-
-/** SemaphoreLockRequest Model */
 export interface SemaphoreLockRequest {
-  id?: string;
-  body?: string;
-  crn?: string;
   channelId?: string;
 }
 
-/** PagedSemaphoreListReadResponse Model */
 export interface PagedSemaphoreListReadResponse {
   Items?: {
     owner?: string;
@@ -241,11 +128,6 @@ export interface PagedSemaphoreListReadResponse {
     meta?: {
       jobCrnInjectionPoint?: string;
     };
-    websemaphore?: {
-      channelCrn?: string;
-      release?: boolean;
-      isActive?: boolean;
-    };
     callback?: {
       protocol?: string;
       address?: string;
@@ -267,7 +149,6 @@ export interface PagedSemaphoreListReadResponse {
   LastEvaluatedKey?: string;
 }
 
-/** SemaphoreUpsertRequest Model */
 export interface SemaphoreUpsertRequest {
   owner?: string;
   mapping?: {
@@ -289,11 +170,6 @@ export interface SemaphoreUpsertRequest {
   meta?: {
     jobCrnInjectionPoint?: string;
   };
-  websemaphore?: {
-    channelCrn?: string;
-    release?: boolean;
-    isActive?: boolean;
-  };
   callback?: {
     protocol?: string;
     address?: string;
@@ -311,7 +187,6 @@ export interface SemaphoreUpsertRequest {
   };
 }
 
-/** SemaphoreReadResponse Model */
 export interface SemaphoreReadResponse {
   owner?: string;
   mapping?: {
@@ -333,11 +208,6 @@ export interface SemaphoreReadResponse {
   meta?: {
     jobCrnInjectionPoint?: string;
   };
-  websemaphore?: {
-    channelCrn?: string;
-    release?: boolean;
-    isActive?: boolean;
-  };
   callback?: {
     protocol?: string;
     address?: string;
@@ -355,64 +225,14 @@ export interface SemaphoreReadResponse {
   };
 }
 
-/** PagedSemaphoreReadQueueResponse Model */
 export interface PagedSemaphoreReadQueueResponse {
   Items?: {
-    created?: string;
-    messageId?: string;
-    error?: string;
-    timer?: {
-      crn?: string;
-    };
-    deleted?: boolean;
     payload?: object;
     meta?: {
       routing?: {
         protocol?: string;
         url?: string;
         remoteId?: string;
-      };
-    };
-    semaphore?: {
-      owner?: string;
-      mapping?: {
-        canOverrideRouting?: boolean;
-        handler?: string;
-        inputData?: string;
-        maxExecutionTime?: number;
-        language?: string;
-        isActive?: boolean;
-      };
-      maxValue?: number;
-      created?: string;
-      title?: string;
-      isActive?: boolean;
-      timeout?: {
-        value?: number;
-        since?: string;
-      };
-      meta?: {
-        jobCrnInjectionPoint?: string;
-      };
-      websemaphore?: {
-        channelCrn?: string;
-        release?: boolean;
-        isActive?: boolean;
-      };
-      callback?: {
-        protocol?: string;
-        address?: string;
-        method?: string;
-        onDeliveryError?: string;
-        isActive?: boolean;
-      };
-      id?: string;
-      updated?: string;
-      maxValueScope?: string;
-      websockets?: {
-        onClientDropped?: string;
-        isActive?: boolean;
-        allowContinuedSessions?: boolean;
       };
     };
     attributes?: {
@@ -427,25 +247,10 @@ export interface PagedSemaphoreReadQueueResponse {
       MessageDeduplicationId?: string;
       ApproximateFirstReceiveTimestamp?: string;
     };
-    updated?: string;
-    crn?: string;
-    lastStatus?: string;
-    channelId?: string;
-    status?: string;
   }[];
   Count?: number;
   ScannedCount?: number;
   LastEvaluatedKey?: string;
-}
-
-/** SemaphoreJobStateTransformRequest Model */
-export interface SemaphoreJobStateTransformRequest {
-  jobCrn?: string;
-}
-
-/** SemaphoreChannel Model */
-export interface SemaphoreChannel {
-  channelId?: string;
 }
 
 export interface EmailUpsertResponse {
@@ -478,8 +283,6 @@ export interface ApikeyPagedListOwnerKeysResponse {
     /** @default "0" */
     updated?: string;
     hash?: string;
-    /** @default "true" */
-    policy?: string;
   }[];
   Count?: number;
   ScannedCount?: number;
@@ -491,8 +294,6 @@ export interface ApikeyUpsertResponse {
   success?: boolean;
   /** @default "" */
   key?: string;
-  /** @default "true" */
-  policy?: string;
 }
 
 export interface ApikeyUpsertRequest {
@@ -502,8 +303,6 @@ export interface ApikeyUpsertRequest {
   title?: string;
   /** @default true */
   isActive?: boolean;
-  /** @default "true" */
-  policy?: string;
 }
 
 export interface OkResponse {
@@ -738,7 +537,7 @@ export class HttpClient<SecurityDataType = unknown> {
 
 /**
  * @title websemaphore-openapi
- * @version 2025-04-03T13:14:42Z
+ * @version 2025-02-03T14:06:40Z
  * @baseUrl https://api-us-dev.websemaphore.com/v1
  */
 export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
@@ -951,71 +750,48 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         ...params,
       }),
   };
-  payment = {
+  infoAuth = {
     /**
      * No description
      *
-     * @tags clientAlias#createStripeCheckout
-     * @name CreateStripeCheckout
-     * @summary upcoming...
-     * @request POST:/payment/stripe/checkoutSession
+     * @name InfoAuthList
+     * @request GET:/info-auth
      * @secure
      */
-    createStripeCheckout: (
-      StripeCheckoutSessionCreateRequest: StripeCheckoutSessionCreateRequest,
-      params: RequestParams = {},
-    ) =>
-      this.request<StripeCheckoutSessionCreateResponse, ErrorResponse>({
-        path: `/payment/stripe/checkoutSession`,
-        method: "POST",
-        body: StripeCheckoutSessionCreateRequest,
+    infoAuthList: (params: RequestParams = {}) =>
+      this.request<void, any>({
+        path: `/info-auth`,
+        method: "GET",
         secure: true,
         type: ContentType.Json,
-        format: "json",
         ...params,
       }),
 
     /**
      * No description
      *
-     * @name OptionsPayment
-     * @request OPTIONS:/payment/stripe/checkoutSession
+     * @name OptionsInfoAuth
+     * @request OPTIONS:/info-auth
      */
-    optionsPayment: (params: RequestParams = {}) =>
+    optionsInfoAuth: (params: RequestParams = {}) =>
       this.request<void, any>({
-        path: `/payment/stripe/checkoutSession`,
+        path: `/info-auth`,
         method: "OPTIONS",
         type: ContentType.Json,
         ...params,
       }),
-
+  };
+  pollNow = {
     /**
      * No description
      *
-     * @name StripeWebhookCreatePaymentStripeWebhook
-     * @summary upcoming...
-     * @request POST:/payment/stripe/webhook
+     * @name PollNowList
+     * @request GET:/poll-now
      */
-    stripeWebhookCreatePaymentStripeWebhook: (params: RequestParams = {}) =>
-      this.request<void, ErrorResponse>({
-        path: `/payment/stripe/webhook`,
-        method: "POST",
-        type: ContentType.Json,
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @name OptionsPayment2
-     * @request OPTIONS:/payment/stripe/webhook
-     * @originalName optionsPayment
-     * @duplicate
-     */
-    optionsPayment2: (params: RequestParams = {}) =>
-      this.request<void, any>({
-        path: `/payment/stripe/webhook`,
-        method: "OPTIONS",
+    pollNowList: (params: RequestParams = {}) =>
+      this.request<void, void>({
+        path: `/poll-now`,
+        method: "GET",
         type: ContentType.Json,
         ...params,
       }),
@@ -1129,8 +905,9 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
  * @tags clientAlias#acquire, publicApi
  * @name Acquire
  * @summary Asynchronously acquire a semaphore lock. 
-          Returns an immediate confirmation. The message will be processed as soon 
-          as possible and WebSemaphore will invoke the preconfigured processor endpoint to continue the flow.
+            Returns an immediate confirmation. The message will be processed as soon 
+            as possible and WebSemaphore will invoke the preconfigured processor 
+            endpoint to continue the flow.
  * @request POST:/semaphore/{semaphoreId}/acquire
  * @secure
  */
@@ -1140,22 +917,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         method: "POST",
         body: SemaphoreLockRequest,
         secure: true,
-        type: ContentType.Json,
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @name OptionsSemaphore3
-     * @request OPTIONS:/semaphore/{semaphoreId}/acquire
-     * @originalName optionsSemaphore
-     * @duplicate
-     */
-    optionsSemaphore3: (semaphoreId: string, params: RequestParams = {}) =>
-      this.request<void, any>({
-        path: `/semaphore/${semaphoreId}/acquire`,
-        method: "OPTIONS",
         type: ContentType.Json,
         ...params,
       }),
@@ -1183,12 +944,12 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
-     * @name OptionsSemaphore4
+     * @name OptionsSemaphore3
      * @request OPTIONS:/semaphore/{semaphoreId}/acquireSync
      * @originalName optionsSemaphore
      * @duplicate
      */
-    optionsSemaphore4: (semaphoreId: string, params: RequestParams = {}) =>
+    optionsSemaphore3: (semaphoreId: string, params: RequestParams = {}) =>
       this.request<void, any>({
         path: `/semaphore/${semaphoreId}/acquireSync`,
         method: "OPTIONS",
@@ -1205,11 +966,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request POST:/semaphore/{semaphoreId}/activate
      * @secure
      */
-    activate: (semaphoreId: string, SemaphoreChannel: SemaphoreChannel, params: RequestParams = {}) =>
+    activate: (semaphoreId: string, SemaphoreLockRequest: SemaphoreLockRequest, params: RequestParams = {}) =>
       this.request<OkResponse, ErrorResponse>({
         path: `/semaphore/${semaphoreId}/activate`,
         method: "POST",
-        body: SemaphoreChannel,
+        body: SemaphoreLockRequest,
         secure: true,
         type: ContentType.Json,
         format: "json",
@@ -1219,138 +980,14 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
-     * @name OptionsSemaphore5
+     * @name OptionsSemaphore4
      * @request OPTIONS:/semaphore/{semaphoreId}/activate
      * @originalName optionsSemaphore
      * @duplicate
      */
-    optionsSemaphore5: (semaphoreId: string, params: RequestParams = {}) =>
+    optionsSemaphore4: (semaphoreId: string, params: RequestParams = {}) =>
       this.request<void, any>({
         path: `/semaphore/${semaphoreId}/activate`,
-        method: "OPTIONS",
-        type: ContentType.Json,
-        ...params,
-      }),
-
-    /**
- * No description
- *
- * @tags clientAlias#cancel, publicApi
- * @name Cancel
- * @summary Asynchronously cancel a semaphore lock. 
-          Returns an immediate confirmation. The message will be processed as soon 
-          as possible and WebSemaphore will cancel the job given by jobCrn.
- * @request POST:/semaphore/{semaphoreId}/cancel
- * @secure
- */
-    cancel: (
-      semaphoreId: string,
-      SemaphoreJobStateTransformRequest: SemaphoreJobStateTransformRequest,
-      params: RequestParams = {},
-    ) =>
-      this.request<void, void>({
-        path: `/semaphore/${semaphoreId}/cancel`,
-        method: "POST",
-        body: SemaphoreJobStateTransformRequest,
-        secure: true,
-        type: ContentType.Json,
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @name OptionsSemaphore6
-     * @request OPTIONS:/semaphore/{semaphoreId}/cancel
-     * @originalName optionsSemaphore
-     * @duplicate
-     */
-    optionsSemaphore6: (semaphoreId: string, params: RequestParams = {}) =>
-      this.request<void, any>({
-        path: `/semaphore/${semaphoreId}/cancel`,
-        method: "OPTIONS",
-        type: ContentType.Json,
-        ...params,
-      }),
-
-    /**
- * No description
- *
- * @tags clientAlias#delete, publicApi
- * @name Delete
- * @summary Asynchronously delete a semaphore lock. 
-          Returns an immediate confirmation. The message will be processed as soon 
-          as possible and WebSemaphore will release the job given by jobCrn.
- * @request POST:/semaphore/{semaphoreId}/delete
- * @secure
- */
-    delete: (
-      semaphoreId: string,
-      SemaphoreJobStateTransformRequest: SemaphoreJobStateTransformRequest,
-      params: RequestParams = {},
-    ) =>
-      this.request<void, void>({
-        path: `/semaphore/${semaphoreId}/delete`,
-        method: "POST",
-        body: SemaphoreJobStateTransformRequest,
-        secure: true,
-        type: ContentType.Json,
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @name OptionsSemaphore7
-     * @request OPTIONS:/semaphore/{semaphoreId}/delete
-     * @originalName optionsSemaphore
-     * @duplicate
-     */
-    optionsSemaphore7: (semaphoreId: string, params: RequestParams = {}) =>
-      this.request<void, any>({
-        path: `/semaphore/${semaphoreId}/delete`,
-        method: "OPTIONS",
-        type: ContentType.Json,
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @tags clientAlias#readJob, publicApi
-     * @name ReadJob
-     * @summary Read a job.
-     * @request GET:/semaphore/{semaphoreId}/job
-     * @secure
-     */
-    readJob: (
-      semaphoreId: string,
-      query?: {
-        crn?: string;
-      },
-      params: RequestParams = {},
-    ) =>
-      this.request<SemaphoreJobReadResponse, ErrorResponse>({
-        path: `/semaphore/${semaphoreId}/job`,
-        method: "GET",
-        query: query,
-        secure: true,
-        type: ContentType.Json,
-        format: "json",
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @name OptionsSemaphore8
-     * @request OPTIONS:/semaphore/{semaphoreId}/job
-     * @originalName optionsSemaphore
-     * @duplicate
-     */
-    optionsSemaphore8: (semaphoreId: string, params: RequestParams = {}) =>
-      this.request<void, any>({
-        path: `/semaphore/${semaphoreId}/job`,
         method: "OPTIONS",
         type: ContentType.Json,
         ...params,
@@ -1378,12 +1015,12 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
-     * @name OptionsSemaphore9
+     * @name OptionsSemaphore5
      * @request OPTIONS:/semaphore/{semaphoreId}/purge
      * @originalName optionsSemaphore
      * @duplicate
      */
-    optionsSemaphore9: (semaphoreId: string, params: RequestParams = {}) =>
+    optionsSemaphore5: (semaphoreId: string, params: RequestParams = {}) =>
       this.request<void, any>({
         path: `/semaphore/${semaphoreId}/purge`,
         method: "OPTIONS",
@@ -1423,12 +1060,12 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
-     * @name OptionsSemaphore10
+     * @name OptionsSemaphore6
      * @request OPTIONS:/semaphore/{semaphoreId}/readQueue
      * @originalName optionsSemaphore
      * @duplicate
      */
-    optionsSemaphore10: (semaphoreId: string, params: RequestParams = {}) =>
+    optionsSemaphore6: (semaphoreId: string, params: RequestParams = {}) =>
       this.request<void, any>({
         path: `/semaphore/${semaphoreId}/readQueue`,
         method: "OPTIONS",
@@ -1437,119 +1074,17 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       }),
 
     /**
- * No description
- *
- * @tags clientAlias#release, publicApi
- * @name Release
- * @summary Asynchronously release a semaphore lock. 
-          Returns an immediate confirmation. The message will be processed as soon 
-          as possible and WebSemaphore will release the job given by jobCrn.
- * @request POST:/semaphore/{semaphoreId}/release
- * @secure
- */
-    release: (semaphoreId: string, params: RequestParams = {}) =>
+     * No description
+     *
+     * @name ReleaseCreateSemaphoreSemaphoreIdRelease
+     * @request POST:/semaphore/{semaphoreId}/release
+     * @secure
+     */
+    releaseCreateSemaphoreSemaphoreIdRelease: (semaphoreId: string, params: RequestParams = {}) =>
       this.request<void, void>({
         path: `/semaphore/${semaphoreId}/release`,
         method: "POST",
         secure: true,
-        type: ContentType.Json,
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @name OptionsSemaphore11
-     * @request OPTIONS:/semaphore/{semaphoreId}/release
-     * @originalName optionsSemaphore
-     * @duplicate
-     */
-    optionsSemaphore11: (semaphoreId: string, params: RequestParams = {}) =>
-      this.request<void, any>({
-        path: `/semaphore/${semaphoreId}/release`,
-        method: "OPTIONS",
-        type: ContentType.Json,
-        ...params,
-      }),
-
-    /**
- * No description
- *
- * @tags clientAlias#requeue, publicApi
- * @name Requeue
- * @summary Asynchronously requeue a semaphore lock. 
-          Returns an immediate confirmation. The message will be processed as soon 
-          as possible and WebSemaphore will requeue the message with the same payload but new id.
- * @request POST:/semaphore/{semaphoreId}/requeue
- * @secure
- */
-    requeue: (
-      semaphoreId: string,
-      SemaphoreJobStateTransformRequest: SemaphoreJobStateTransformRequest,
-      params: RequestParams = {},
-    ) =>
-      this.request<void, void>({
-        path: `/semaphore/${semaphoreId}/requeue`,
-        method: "POST",
-        body: SemaphoreJobStateTransformRequest,
-        secure: true,
-        type: ContentType.Json,
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @name OptionsSemaphore12
-     * @request OPTIONS:/semaphore/{semaphoreId}/requeue
-     * @originalName optionsSemaphore
-     * @duplicate
-     */
-    optionsSemaphore12: (semaphoreId: string, params: RequestParams = {}) =>
-      this.request<void, any>({
-        path: `/semaphore/${semaphoreId}/requeue`,
-        method: "OPTIONS",
-        type: ContentType.Json,
-        ...params,
-      }),
-
-    /**
- * No description
- *
- * @tags clientAlias#reschedule, publicApi
- * @name Reschedule
- * @summary Asynchronously reschedule a semaphore lock. 
-          Returns an immediate confirmation. The message will be processed as soon 
-          as possible and WebSemaphore will reschedule the job preserving its id/crn and place in the queue.
- * @request POST:/semaphore/{semaphoreId}/reschedule
- * @secure
- */
-    reschedule: (
-      semaphoreId: string,
-      SemaphoreJobStateTransformRequest: SemaphoreJobStateTransformRequest,
-      params: RequestParams = {},
-    ) =>
-      this.request<void, void>({
-        path: `/semaphore/${semaphoreId}/reschedule`,
-        method: "POST",
-        body: SemaphoreJobStateTransformRequest,
-        secure: true,
-        type: ContentType.Json,
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @name OptionsSemaphore13
-     * @request OPTIONS:/semaphore/{semaphoreId}/reschedule
-     * @originalName optionsSemaphore
-     * @duplicate
-     */
-    optionsSemaphore13: (semaphoreId: string, params: RequestParams = {}) =>
-      this.request<void, any>({
-        path: `/semaphore/${semaphoreId}/reschedule`,
-        method: "OPTIONS",
         type: ContentType.Json,
         ...params,
       }),

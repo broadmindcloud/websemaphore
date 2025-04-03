@@ -1,11 +1,9 @@
 import { EventEmitter } from "eventemitter3";
 import { LogLevel, UpdateClientConfig, WebSocketImplementation } from "../../types";
 import { DelayedPromise } from "../../utils";
+import { WebSemaphoreWebsocketsUrl } from "../shared";
 // impoer { WebSocket}
-export const ChainstreamWebsocketsServers: Record<string, string> = {
-    "dev": "wss://wsapi-eu-dev.websemaphore.com/v1",
-    "prod": "wss://wsapi.websemaphore.com/v1"
-};
+
 
 export class WebSemaphoreWebsocketsTransportClient extends EventEmitter {
     socket: WebSocket | null;
@@ -21,16 +19,16 @@ export class WebSemaphoreWebsocketsTransportClient extends EventEmitter {
 
     constructor(
         upd: UpdateClientConfig,
-        opts?: { websockets?: WebSocketImplementation, url?: "", env?: "", logLevel?: LogLevel }
+        opts?: { websockets?: WebSocketImplementation, url?: string, env?: string, logLevel?: LogLevel }
     ) {
         super();
 
         const websockets = opts?.websockets ? opts.websockets : (globalThis as any).WebSocket;
         this.WSImplementation = websockets;
 
-        const env = opts?.env || "prod";
+        // const env = opts?.env || "prod";
 
-        this.url = opts?.url || ChainstreamWebsocketsServers[env];
+        this.url = opts?.url ? (WebSemaphoreWebsocketsUrl(opts?.url) || opts.url) : (WebSemaphoreWebsocketsUrl("prod") as string);
 
         this.socket = null; //new websockets();
 
@@ -57,7 +55,8 @@ export class WebSemaphoreWebsocketsTransportClient extends EventEmitter {
         return this.socket && (this.socket.readyState === this.socket.OPEN);
     }
 
-    private initPing() {
+    private initPing(conn : any) {
+        // console.log("Conn:", conn)
         this.pingInterval = setInterval(() => {
             this.socket?.send("ping");
             this.pingCounter++;

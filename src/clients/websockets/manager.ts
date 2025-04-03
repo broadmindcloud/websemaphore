@@ -3,11 +3,12 @@ import { WebSemaphoreWebsocketsClient } from "./client";
 import { DelayedPromise } from "../../utils";
 import { WebSocketImplementation, LogLevel } from "../../types";
 
-export const WebSemaphoreWebsocketsClientManager = (opts?: { websockets?: WebSocketImplementation, logLevel?: LogLevel }) => {
+export const WebSemaphoreWebsocketsClientManager = (opts?: { websockets?: WebSocketImplementation, logLevel?: LogLevel, baseUrl?: string }) => {
     const wsImpl: WebSocketImplementation = opts?.websockets ? opts.websockets : (globalThis as any).WebSocket;
+
     const wsClient = new WebSemaphoreWebsocketsTransportClient(
         (wsServer: string, token: string) => `${wsServer}?token=${encodeURIComponent(token)}`,
-        { websockets: wsImpl, logLevel: opts?.logLevel }
+        { websockets: wsImpl, logLevel: opts?.logLevel, url: opts?.baseUrl }
     );
 
     let chainstreamWebsocketsClient = new WebSemaphoreWebsocketsClient({ wsClient: wsClient, logLevel: opts?.logLevel })

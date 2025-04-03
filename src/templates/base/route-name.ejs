@@ -23,8 +23,10 @@ const originalMethodAliases = {
 };
 
 const ma = (prefix) => (pathName, hasPathInserts) => {
-  const friendlyNameTag = tags?.find(t => "clientAlias#");
+  const friendlyNameTag = tags?.find(t => t.startsWith("clientAlias#"));
   const friendlyName = (friendlyNameTag || "").split(/#/)[1];
+  //debugger;
+  console.log("***** ", route, prefix, method, pathName, friendlyName)
   const name = friendlyName || originalMethodAliases[method](pathName, hasPathInserts);
   return _.camelCase(name);
 };
@@ -58,7 +60,8 @@ const createCustomOperationId = (method, route, moduleName) => {
     ? splitedRouteBySlash.splice(1)
     : splitedRouteBySlash
   ).join("_");
-  return routeParts.length > 3 && methodAliases[method]
+  // Note 3.4.25: for some reason it was > 3 in next line, changed to 2 - IR
+  return routeParts.length > 2 && methodAliases[method]
     ? methodAliases[method](routeParts, hasPathInserts)
     : _.camelCase(_.lowerCase(method) + "_" + [moduleName].join("_")) || "index";
 };

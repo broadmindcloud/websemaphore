@@ -1,14 +1,8 @@
 import { LogLevel } from "../../types";
+import { WebSemaphoreApiUrl } from "../shared";
 import { Api, ErrorResponse, UserReadResponse } from "./api";
 
 export class WebsemaphoreHttpClient extends Api<{ token: string }> { }
-
-export const ChainstreamBaseUrls: Record<string, string> = {
-  "dev": "https://api-eu-dev.websemaphore.com/v1",
-  "prod": "https://api.websemaphore.com/v1",
-  "us-dev": "api-us-dev.websemaphore.com/v1", //"https://api-eu-dev.websemaphore.com/v1",
-  "us-prod": "https://api.websemaphore.com/v1",
-};
 
 // const baseUrl = newlifeBaseUrl; //"https://api-eu-sit.newlife.io/creator";
 
@@ -23,9 +17,7 @@ export const WebSemaphoreHttpClientManager = (params?: {  baseUrl?: string, toke
 
   const initialize = (params?: { baseUrl?: string, fetch?: any, token?: string }) => {
     let { baseUrl, fetch: customFetch } = params || {};
-    baseUrl = baseUrl || "prod";
-    if (ChainstreamBaseUrls[baseUrl])
-      baseUrl = ChainstreamBaseUrls[baseUrl];
+    baseUrl = baseUrl ? (WebSemaphoreApiUrl(baseUrl) || baseUrl) : (WebSemaphoreApiUrl("prod") as string);//baseUrl || "prod";
 
     log(baseUrl);
 

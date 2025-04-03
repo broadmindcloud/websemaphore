@@ -1,11 +1,16 @@
+import { SemaphoreJob, SemaphoreChannel, SemaphoreJobTimer } from "../../chainstream-domain-model/lib/semaphore";
 
-type SemaphoreChannel = { semaphoreId: string, channelId?: string };
-export type AcquireParams = SemaphoreChannel & { body?: any, sync?: boolean }
-export  type ReleaseParams = SemaphoreChannel & { messageId: string };
+export { SemaphoreJob, SemaphoreChannel, SemaphoreJobTimer };
+
+// type SemaphoreChannel = { semaphoreId: string, channelId?: string };
+export type AcquireParams = { semaphoreId: string, channelId?: string, body?: any, sync?: boolean }
+export  type JobActionParams = { jobCrn: string };
 
 export type AcquireResponse<T = any> = {
     type: string,
     event: string,
+    jobCrn: string,
+    job: SemaphoreJob
     payload: {
         id: string,
         body: T

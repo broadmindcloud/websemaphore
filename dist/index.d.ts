@@ -1,6 +1,9 @@
+import { default as default_2 } from 'eventemitter3';
 import { EventEmitter } from 'eventemitter3';
 
-declare type AcquireParams = SemaphoreChannel & {
+declare type AcquireParams = {
+    semaphoreId: string;
+    channelId?: string;
     body?: any;
     sync?: boolean;
 };
@@ -8,9 +11,9 @@ declare type AcquireParams = SemaphoreChannel & {
 export declare type AnyResponse = object;
 
 /**
- * @title broadmind-chainstream-root-api-eu-dev
- * @version 2023-12-08T16:10:33Z
- * @baseUrl https://api-eu-dev.websemaphore.com/v1
+ * @title websemaphore-openapi
+ * @version 2025-04-03T13:14:42Z
+ * @baseUrl https://api-us-dev.websemaphore.com/v1
  */
 export declare class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
     advisor: {
@@ -99,6 +102,7 @@ export declare class Api<SecurityDataType extends unknown> extends HttpClient<Se
          *
          * @tags clientAlias#upsert
          * @name Upsert
+         * @summary upcoming...
          * @request POST:/emails/upsertEmail
          */
         upsert: (EmailUpsertRequest: EmailUpsertRequest, params?: RequestParams) => Promise<HttpResponse<EmailUpsertResponse, ErrorResponse>>;
@@ -126,28 +130,47 @@ export declare class Api<SecurityDataType extends unknown> extends HttpClient<Se
          */
         optionsInfo: (params?: RequestParams) => Promise<HttpResponse<void, any>>;
     };
-    infoAuth: {
+    payment: {
         /**
          * No description
          *
-         * @name InfoAuthList
-         * @request GET:/info-auth
+         * @tags clientAlias#createStripeCheckout
+         * @name CreateStripeCheckout
+         * @summary upcoming...
+         * @request POST:/payment/stripe/checkoutSession
          * @secure
          */
-        infoAuthList: (params?: RequestParams) => Promise<HttpResponse<void, any>>;
+        createStripeCheckout: (StripeCheckoutSessionCreateRequest: StripeCheckoutSessionCreateRequest, params?: RequestParams) => Promise<HttpResponse<object, ErrorResponse>>;
         /**
          * No description
          *
-         * @name OptionsInfoAuth
-         * @request OPTIONS:/info-auth
+         * @name OptionsPayment
+         * @request OPTIONS:/payment/stripe/checkoutSession
          */
-        optionsInfoAuth: (params?: RequestParams) => Promise<HttpResponse<void, any>>;
+        optionsPayment: (params?: RequestParams) => Promise<HttpResponse<void, any>>;
+        /**
+         * No description
+         *
+         * @name StripeWebhookCreatePaymentStripeWebhook
+         * @summary upcoming...
+         * @request POST:/payment/stripe/webhook
+         */
+        stripeWebhookCreatePaymentStripeWebhook: (params?: RequestParams) => Promise<HttpResponse<void, ErrorResponse>>;
+        /**
+         * No description
+         *
+         * @name OptionsPayment2
+         * @request OPTIONS:/payment/stripe/webhook
+         * @originalName optionsPayment
+         * @duplicate
+         */
+        optionsPayment2: (params?: RequestParams) => Promise<HttpResponse<void, any>>;
     };
     semaphore: {
         /**
          * No description
          *
-         * @tags clientAlias#read
+         * @tags clientAlias#read, publicApi
          * @name Read
          * @summary Returns a semaphore's settings
          * @request GET:/semaphore
@@ -160,7 +183,7 @@ export declare class Api<SecurityDataType extends unknown> extends HttpClient<Se
         /**
          * No description
          *
-         * @tags clientAlias#upsert
+         * @tags clientAlias#upsert, publicApi
          * @name Upsert
          * @summary Creates or updates a semaphore's settings. Omit the id in input to create a new semaphore.
          * @request POST:/semaphore
@@ -177,7 +200,7 @@ export declare class Api<SecurityDataType extends unknown> extends HttpClient<Se
         /**
          * No description
          *
-         * @tags clientAlias#list
+         * @tags clientAlias#list, publicApi
          * @name List
          * @summary List semaphores. Use .startKey to page through results
          * @request GET:/semaphore/list
@@ -199,9 +222,11 @@ export declare class Api<SecurityDataType extends unknown> extends HttpClient<Se
         /**
          * No description
          *
-         * @tags clientAlias#acquire
+         * @tags clientAlias#acquire, publicApi
          * @name Acquire
-         * @summary upcoming...
+         * @summary Asynchronously acquire a semaphore lock.
+         Returns an immediate confirmation. The message will be processed as soon
+         as possible and WebSemaphore will invoke the preconfigured processor endpoint to continue the flow.
          * @request POST:/semaphore/{semaphoreId}/acquire
          * @secure
          */
@@ -209,7 +234,16 @@ export declare class Api<SecurityDataType extends unknown> extends HttpClient<Se
         /**
          * No description
          *
-         * @tags clientAlias#acquireSync
+         * @name OptionsSemaphore3
+         * @request OPTIONS:/semaphore/{semaphoreId}/acquire
+         * @originalName optionsSemaphore
+         * @duplicate
+         */
+        optionsSemaphore3: (semaphoreId: string, params?: RequestParams) => Promise<HttpResponse<void, any>>;
+        /**
+         * No description
+         *
+         * @tags clientAlias#acquireSync, publicApi
          * @name AcquireSync
          * @summary Synchronously acquire a semaphore lock. Immediately returns either an `acquired` or `rejected` status.
          * @request POST:/semaphore/{semaphoreId}/acquireSync
@@ -219,27 +253,8 @@ export declare class Api<SecurityDataType extends unknown> extends HttpClient<Se
         /**
          * No description
          *
-         * @name OptionsSemaphore3
-         * @request OPTIONS:/semaphore/{semaphoreId}/acquireSync
-         * @originalName optionsSemaphore
-         * @duplicate
-         */
-        optionsSemaphore3: (semaphoreId: string, params?: RequestParams) => Promise<HttpResponse<void, any>>;
-        /**
-         * No description
-         *
-         * @tags clientAlias#activate
-         * @name Activate
-         * @summary Synchronously acquire a semaphore lock. Immediately returns either an `acquired` or `rejected` status.
-         * @request POST:/semaphore/{semaphoreId}/activate
-         * @secure
-         */
-        activate: (semaphoreId: string, SemaphoreLockRequest: SemaphoreLockRequest, params?: RequestParams) => Promise<HttpResponse<OkResponse, ErrorResponse>>;
-        /**
-         * No description
-         *
          * @name OptionsSemaphore4
-         * @request OPTIONS:/semaphore/{semaphoreId}/activate
+         * @request OPTIONS:/semaphore/{semaphoreId}/acquireSync
          * @originalName optionsSemaphore
          * @duplicate
          */
@@ -247,7 +262,89 @@ export declare class Api<SecurityDataType extends unknown> extends HttpClient<Se
         /**
          * No description
          *
-         * @tags clientAlias#purgeQueue
+         * @tags clientAlias#activate, publicApi
+         * @name Activate
+         * @summary Activate a semaphore and attempt to start processing its backlog.
+         * @request POST:/semaphore/{semaphoreId}/activate
+         * @secure
+         */
+        activate: (semaphoreId: string, SemaphoreChannel: SemaphoreChannel, params?: RequestParams) => Promise<HttpResponse<OkResponse, ErrorResponse>>;
+        /**
+         * No description
+         *
+         * @name OptionsSemaphore5
+         * @request OPTIONS:/semaphore/{semaphoreId}/activate
+         * @originalName optionsSemaphore
+         * @duplicate
+         */
+        optionsSemaphore5: (semaphoreId: string, params?: RequestParams) => Promise<HttpResponse<void, any>>;
+        /**
+         * No description
+         *
+         * @tags clientAlias#cancel, publicApi
+         * @name Cancel
+         * @summary Asynchronously cancel a semaphore lock.
+         Returns an immediate confirmation. The message will be processed as soon
+         as possible and WebSemaphore will cancel the job given by jobCrn.
+         * @request POST:/semaphore/{semaphoreId}/cancel
+         * @secure
+         */
+        cancel: (semaphoreId: string, SemaphoreJobStateTransformRequest: SemaphoreJobStateTransformRequest, params?: RequestParams) => Promise<HttpResponse<void, void>>;
+        /**
+         * No description
+         *
+         * @name OptionsSemaphore6
+         * @request OPTIONS:/semaphore/{semaphoreId}/cancel
+         * @originalName optionsSemaphore
+         * @duplicate
+         */
+        optionsSemaphore6: (semaphoreId: string, params?: RequestParams) => Promise<HttpResponse<void, any>>;
+        /**
+         * No description
+         *
+         * @tags clientAlias#delete, publicApi
+         * @name Delete
+         * @summary Asynchronously delete a semaphore lock.
+         Returns an immediate confirmation. The message will be processed as soon
+         as possible and WebSemaphore will release the job given by jobCrn.
+         * @request POST:/semaphore/{semaphoreId}/delete
+         * @secure
+         */
+        delete: (semaphoreId: string, SemaphoreJobStateTransformRequest: SemaphoreJobStateTransformRequest, params?: RequestParams) => Promise<HttpResponse<void, void>>;
+        /**
+         * No description
+         *
+         * @name OptionsSemaphore7
+         * @request OPTIONS:/semaphore/{semaphoreId}/delete
+         * @originalName optionsSemaphore
+         * @duplicate
+         */
+        optionsSemaphore7: (semaphoreId: string, params?: RequestParams) => Promise<HttpResponse<void, any>>;
+        /**
+         * No description
+         *
+         * @tags clientAlias#readJob, publicApi
+         * @name ReadJob
+         * @summary Read a job.
+         * @request GET:/semaphore/{semaphoreId}/job
+         * @secure
+         */
+        readJob: (semaphoreId: string, query?: {
+            crn?: string;
+        }, params?: RequestParams) => Promise<HttpResponse<SemaphoreJobReadResponse, ErrorResponse>>;
+        /**
+         * No description
+         *
+         * @name OptionsSemaphore8
+         * @request OPTIONS:/semaphore/{semaphoreId}/job
+         * @originalName optionsSemaphore
+         * @duplicate
+         */
+        optionsSemaphore8: (semaphoreId: string, params?: RequestParams) => Promise<HttpResponse<void, any>>;
+        /**
+         * No description
+         *
+         * @tags clientAlias#purgeQueue, publicApi
          * @name PurgeQueue
          * @summary purge message queue
          * @request DELETE:/semaphore/{semaphoreId}/purge
@@ -257,54 +354,99 @@ export declare class Api<SecurityDataType extends unknown> extends HttpClient<Se
         /**
          * No description
          *
-         * @name OptionsSemaphore5
+         * @name OptionsSemaphore9
          * @request OPTIONS:/semaphore/{semaphoreId}/purge
          * @originalName optionsSemaphore
          * @duplicate
          */
-        optionsSemaphore5: (semaphoreId: string, params?: RequestParams) => Promise<HttpResponse<void, any>>;
+        optionsSemaphore9: (semaphoreId: string, params?: RequestParams) => Promise<HttpResponse<void, any>>;
         /**
          * No description
          *
-         * @tags clientAlias#readQueue
+         * @tags clientAlias#readQueue, publicApi
          * @name ReadQueue
          * @summary Returns a semaphore's queue contents
          * @request GET:/semaphore/{semaphoreId}/readQueue
          * @secure
          */
         readQueue: (semaphoreId: string, query?: {
+            status?: string;
+            limit?: string;
             pageSize?: string;
             startKey?: string;
-            limit?: string;
         }, params?: RequestParams) => Promise<HttpResponse<PagedSemaphoreReadQueueResponse, ErrorResponse>>;
         /**
          * No description
          *
-         * @name OptionsSemaphore6
+         * @name OptionsSemaphore10
          * @request OPTIONS:/semaphore/{semaphoreId}/readQueue
          * @originalName optionsSemaphore
          * @duplicate
          */
-        optionsSemaphore6: (semaphoreId: string, params?: RequestParams) => Promise<HttpResponse<void, any>>;
+        optionsSemaphore10: (semaphoreId: string, params?: RequestParams) => Promise<HttpResponse<void, any>>;
         /**
          * No description
          *
-         * @tags clientAlias#release
+         * @tags clientAlias#release, publicApi
          * @name Release
-         * @summary Release a semaphore lock.
+         * @summary Asynchronously release a semaphore lock.
+         Returns an immediate confirmation. The message will be processed as soon
+         as possible and WebSemaphore will release the job given by jobCrn.
          * @request POST:/semaphore/{semaphoreId}/release
          * @secure
          */
-        release: (semaphoreId: string, SemaphoreLockRequest: SemaphoreLockRequest, params?: RequestParams) => Promise<HttpResponse<OkResponse, ErrorResponse>>;
+        release: (semaphoreId: string, params?: RequestParams) => Promise<HttpResponse<void, void>>;
         /**
          * No description
          *
-         * @name OptionsSemaphore7
+         * @name OptionsSemaphore11
          * @request OPTIONS:/semaphore/{semaphoreId}/release
          * @originalName optionsSemaphore
          * @duplicate
          */
-        optionsSemaphore7: (semaphoreId: string, params?: RequestParams) => Promise<HttpResponse<void, any>>;
+        optionsSemaphore11: (semaphoreId: string, params?: RequestParams) => Promise<HttpResponse<void, any>>;
+        /**
+         * No description
+         *
+         * @tags clientAlias#requeue, publicApi
+         * @name Requeue
+         * @summary Asynchronously requeue a semaphore lock.
+         Returns an immediate confirmation. The message will be processed as soon
+         as possible and WebSemaphore will requeue the message with the same payload but new id.
+         * @request POST:/semaphore/{semaphoreId}/requeue
+         * @secure
+         */
+        requeue: (semaphoreId: string, SemaphoreJobStateTransformRequest: SemaphoreJobStateTransformRequest, params?: RequestParams) => Promise<HttpResponse<void, void>>;
+        /**
+         * No description
+         *
+         * @name OptionsSemaphore12
+         * @request OPTIONS:/semaphore/{semaphoreId}/requeue
+         * @originalName optionsSemaphore
+         * @duplicate
+         */
+        optionsSemaphore12: (semaphoreId: string, params?: RequestParams) => Promise<HttpResponse<void, any>>;
+        /**
+         * No description
+         *
+         * @tags clientAlias#reschedule, publicApi
+         * @name Reschedule
+         * @summary Asynchronously reschedule a semaphore lock.
+         Returns an immediate confirmation. The message will be processed as soon
+         as possible and WebSemaphore will reschedule the job preserving its id/crn and place in the queue.
+         * @request POST:/semaphore/{semaphoreId}/reschedule
+         * @secure
+         */
+        reschedule: (semaphoreId: string, SemaphoreJobStateTransformRequest: SemaphoreJobStateTransformRequest, params?: RequestParams) => Promise<HttpResponse<void, void>>;
+        /**
+         * No description
+         *
+         * @name OptionsSemaphore13
+         * @request OPTIONS:/semaphore/{semaphoreId}/reschedule
+         * @originalName optionsSemaphore
+         * @duplicate
+         */
+        optionsSemaphore13: (semaphoreId: string, params?: RequestParams) => Promise<HttpResponse<void, any>>;
     };
     user: {
         /**
@@ -356,7 +498,7 @@ export declare class Api<SecurityDataType extends unknown> extends HttpClient<Se
          * @secure
          */
         activityStream: (query?: {
-            after?: string;
+            exclusiveStartKey?: string;
             limit?: string;
         }, params?: RequestParams) => Promise<HttpResponse<object, ErrorResponse>>;
         /**
@@ -439,6 +581,8 @@ export declare interface ApikeyPagedListOwnerKeysResponse {
         /** @default "0" */
         updated?: string;
         hash?: string;
+        /** @default "true" */
+        policy?: string;
     }[];
     Count?: number;
     ScannedCount?: number;
@@ -452,6 +596,8 @@ export declare interface ApikeyUpsertRequest {
     title?: string;
     /** @default true */
     isActive?: boolean;
+    /** @default "true" */
+    policy?: string;
 }
 
 export declare interface ApikeyUpsertResponse {
@@ -459,6 +605,8 @@ export declare interface ApikeyUpsertResponse {
     success?: boolean;
     /** @default "" */
     key?: string;
+    /** @default "true" */
+    policy?: string;
 }
 
 declare type CacheItem = {
@@ -481,7 +629,6 @@ declare type DelayedPromiseType<T = any> = Promise<T> & {
     reject: (val: Error) => void;
 };
 
-/** EmailUpsertRequest Model */
 export declare interface EmailUpsertRequest {
     /** @default "true" */
     reference?: string;
@@ -491,7 +638,6 @@ export declare interface EmailUpsertRequest {
     email?: string;
 }
 
-/** EmailUpsertResponse Model */
 export declare interface EmailUpsertResponse {
     /** @default false */
     success?: boolean;
@@ -561,6 +707,10 @@ export declare interface IdSessionTokenRequest {
     id: string;
 }
 
+declare type JobActionParams = {
+    jobCrn: string;
+};
+
 declare type LockRequestStatus = "waiting" | "acquired" | "rejected";
 
 declare type LogLevel = "" | "ALL";
@@ -569,6 +719,7 @@ export declare interface OkResponse {
     ok?: boolean;
 }
 
+/** PagedSemaphoreListReadResponse Model */
 export declare interface PagedSemaphoreListReadResponse {
     Items?: {
         owner?: string;
@@ -580,8 +731,22 @@ export declare interface PagedSemaphoreListReadResponse {
             language?: string;
             isActive?: boolean;
         };
-        created?: string;
         maxValue?: number;
+        created?: string;
+        title?: string;
+        isActive?: boolean;
+        timeout?: {
+            value?: number;
+            since?: string;
+        };
+        meta?: {
+            jobCrnInjectionPoint?: string;
+        };
+        websemaphore?: {
+            channelCrn?: string;
+            release?: boolean;
+            isActive?: boolean;
+        };
         callback?: {
             protocol?: string;
             address?: string;
@@ -590,8 +755,6 @@ export declare interface PagedSemaphoreListReadResponse {
             isActive?: boolean;
         };
         id?: string;
-        isActive?: boolean;
-        title?: string;
         updated?: string;
         maxValueScope?: string;
         websockets?: {
@@ -605,14 +768,64 @@ export declare interface PagedSemaphoreListReadResponse {
     LastEvaluatedKey?: string;
 }
 
+/** PagedSemaphoreReadQueueResponse Model */
 export declare interface PagedSemaphoreReadQueueResponse {
     Items?: {
+        created?: string;
+        messageId?: string;
+        error?: string;
+        timer?: {
+            crn?: string;
+        };
+        deleted?: boolean;
         payload?: object;
         meta?: {
             routing?: {
                 protocol?: string;
                 url?: string;
                 remoteId?: string;
+            };
+        };
+        semaphore?: {
+            owner?: string;
+            mapping?: {
+                canOverrideRouting?: boolean;
+                handler?: string;
+                inputData?: string;
+                maxExecutionTime?: number;
+                language?: string;
+                isActive?: boolean;
+            };
+            maxValue?: number;
+            created?: string;
+            title?: string;
+            isActive?: boolean;
+            timeout?: {
+                value?: number;
+                since?: string;
+            };
+            meta?: {
+                jobCrnInjectionPoint?: string;
+            };
+            websemaphore?: {
+                channelCrn?: string;
+                release?: boolean;
+                isActive?: boolean;
+            };
+            callback?: {
+                protocol?: string;
+                address?: string;
+                method?: string;
+                onDeliveryError?: string;
+                isActive?: boolean;
+            };
+            id?: string;
+            updated?: string;
+            maxValueScope?: string;
+            websockets?: {
+                onClientDropped?: string;
+                isActive?: boolean;
+                allowContinuedSessions?: boolean;
             };
         };
         attributes?: {
@@ -627,6 +840,11 @@ export declare interface PagedSemaphoreReadQueueResponse {
             MessageDeduplicationId?: string;
             ApproximateFirstReceiveTimestamp?: string;
         };
+        updated?: string;
+        crn?: string;
+        lastStatus?: string;
+        channelId?: string;
+        status?: string;
     }[];
     Count?: number;
     ScannedCount?: number;
@@ -635,23 +853,107 @@ export declare interface PagedSemaphoreReadQueueResponse {
 
 export declare type QueryParamsType = Record<string | number, any>;
 
-declare type ReleaseParams = SemaphoreChannel & {
-    messageId: string;
-};
-
 export declare type RequestParams = Omit<FullRequestParams, "body" | "method" | "query" | "path">;
 
 export declare type ResponseFormat = keyof Omit<Body, "body" | "bodyUsed">;
 
-declare type SemaphoreChannel = {
-    semaphoreId: string;
-    channelId?: string;
-};
-
-export declare interface SemaphoreLockRequest {
+/** SemaphoreChannel Model */
+export declare interface SemaphoreChannel {
     channelId?: string;
 }
 
+/** SemaphoreJobReadResponse Model */
+export declare interface SemaphoreJobReadResponse {
+    created?: string;
+    messageId?: string;
+    error?: string;
+    timer?: {
+        crn?: string;
+    };
+    deleted?: boolean;
+    payload?: object;
+    meta?: {
+        routing?: {
+            protocol?: string;
+            url?: string;
+            remoteId?: string;
+        };
+    };
+    semaphore?: {
+        owner?: string;
+        mapping?: {
+            canOverrideRouting?: boolean;
+            handler?: string;
+            inputData?: string;
+            maxExecutionTime?: number;
+            language?: string;
+            isActive?: boolean;
+        };
+        maxValue?: number;
+        created?: string;
+        title?: string;
+        isActive?: boolean;
+        timeout?: {
+            value?: number;
+            since?: string;
+        };
+        meta?: {
+            jobCrnInjectionPoint?: string;
+        };
+        websemaphore?: {
+            channelCrn?: string;
+            release?: boolean;
+            isActive?: boolean;
+        };
+        callback?: {
+            protocol?: string;
+            address?: string;
+            method?: string;
+            onDeliveryError?: string;
+            isActive?: boolean;
+        };
+        id?: string;
+        updated?: string;
+        maxValueScope?: string;
+        websockets?: {
+            onClientDropped?: string;
+            isActive?: boolean;
+            allowContinuedSessions?: boolean;
+        };
+    };
+    attributes?: {
+        DeadLetterQueueSourceArn?: string;
+        AWSTraceHeader?: string;
+        ApproximateReceiveCount?: string;
+        SentTimestamp?: string;
+        SequenceNumber?: string;
+        messageId?: string;
+        MessageGroupId?: string;
+        SenderId?: string;
+        MessageDeduplicationId?: string;
+        ApproximateFirstReceiveTimestamp?: string;
+    };
+    updated?: string;
+    crn?: string;
+    lastStatus?: string;
+    channelId?: string;
+    status?: string;
+}
+
+/** SemaphoreJobStateTransformRequest Model */
+export declare interface SemaphoreJobStateTransformRequest {
+    jobCrn?: string;
+}
+
+/** SemaphoreLockRequest Model */
+export declare interface SemaphoreLockRequest {
+    id?: string;
+    body?: string;
+    crn?: string;
+    channelId?: string;
+}
+
+/** SemaphoreReadResponse Model */
 export declare interface SemaphoreReadResponse {
     owner?: string;
     mapping?: {
@@ -662,8 +964,22 @@ export declare interface SemaphoreReadResponse {
         language?: string;
         isActive?: boolean;
     };
-    created?: string;
     maxValue?: number;
+    created?: string;
+    title?: string;
+    isActive?: boolean;
+    timeout?: {
+        value?: number;
+        since?: string;
+    };
+    meta?: {
+        jobCrnInjectionPoint?: string;
+    };
+    websemaphore?: {
+        channelCrn?: string;
+        release?: boolean;
+        isActive?: boolean;
+    };
     callback?: {
         protocol?: string;
         address?: string;
@@ -672,8 +988,6 @@ export declare interface SemaphoreReadResponse {
         isActive?: boolean;
     };
     id?: string;
-    isActive?: boolean;
-    title?: string;
     updated?: string;
     maxValueScope?: string;
     websockets?: {
@@ -683,12 +997,14 @@ export declare interface SemaphoreReadResponse {
     };
 }
 
+/** SemaphoreSyncLockResponse Model */
 export declare interface SemaphoreSyncLockResponse {
     semaphoreId: string;
     success?: boolean;
     channelId?: string;
 }
 
+/** SemaphoreUpsertRequest Model */
 export declare interface SemaphoreUpsertRequest {
     owner?: string;
     mapping?: {
@@ -699,8 +1015,22 @@ export declare interface SemaphoreUpsertRequest {
         language?: string;
         isActive?: boolean;
     };
-    created?: string;
     maxValue?: number;
+    created?: string;
+    title?: string;
+    isActive?: boolean;
+    timeout?: {
+        value?: number;
+        since?: string;
+    };
+    meta?: {
+        jobCrnInjectionPoint?: string;
+    };
+    websemaphore?: {
+        channelCrn?: string;
+        release?: boolean;
+        isActive?: boolean;
+    };
     callback?: {
         protocol?: string;
         address?: string;
@@ -709,8 +1039,6 @@ export declare interface SemaphoreUpsertRequest {
         isActive?: boolean;
     };
     id?: string;
-    isActive?: boolean;
-    title?: string;
     updated?: string;
     maxValueScope?: string;
     websockets?: {
@@ -724,23 +1052,40 @@ export declare interface SessionTokenResponse {
     jwt?: string;
 }
 
+export declare interface StripeCheckoutSessionCreateRequest {
+    paymentMethodId: string;
+    customerId: string;
+    priceId?: string;
+}
+
+export declare type StripeCheckoutSessionCreateResponse = object;
+
 declare type UpdateClientConfig = (wsServer: string, token: string) => string;
 
 export declare interface UserCreateRequest {
     /** @default "" */
-    firstName?: string;
-    /** @default "" */
     lastName?: string;
     /** @default "" */
     country?: string;
-    password?: string;
     /** @default "" */
     ticket?: string;
+    ownerScopes?: string[];
+    subscription?: {
+        expires?: string;
+        provider?: string;
+        active?: boolean;
+        subscriptionId?: string;
+        providerUserId?: string;
+    };
+    /** @default "" */
+    firstName?: string;
+    password?: string;
     phone?: string;
     /** @default "" */
     permissions?: string;
     /** @default "" */
     organization?: string;
+    organizations?: string[];
     id?: string;
     email?: string;
     /** @default "" */
@@ -751,18 +1096,27 @@ export declare interface UserCreateRequest {
 
 export declare interface UserReadResponse {
     /** @default "" */
-    firstName?: string;
-    /** @default "" */
     lastName?: string;
     /** @default "" */
     country?: string;
     /** @default "" */
     ticket?: string;
+    ownerScopes?: string[];
+    subscription?: {
+        expires?: string;
+        provider?: string;
+        active?: boolean;
+        subscriptionId?: string;
+        providerUserId?: string;
+    };
+    /** @default "" */
+    firstName?: string;
     phone?: string;
     /** @default "" */
     permissions?: string;
     /** @default "" */
     organization?: string;
+    organizations?: string[];
     id?: string;
     email?: string;
     /** @default "" */
@@ -778,18 +1132,27 @@ export declare interface UserUpdatePasswordNormal {
 
 export declare interface UserUpdateRequest {
     /** @default "" */
-    firstName?: string;
-    /** @default "" */
     lastName?: string;
     /** @default "" */
     country?: string;
     /** @default "" */
     ticket?: string;
+    ownerScopes?: string[];
+    subscription?: {
+        expires?: string;
+        provider?: string;
+        active?: boolean;
+        subscriptionId?: string;
+        providerUserId?: string;
+    };
+    /** @default "" */
+    firstName?: string;
     phone?: string;
     /** @default "" */
     permissions?: string;
     /** @default "" */
     organization?: string;
+    organizations?: string[];
     id?: string;
     email?: string;
     /** @default "" */
@@ -819,7 +1182,7 @@ export declare const WebSemaphoreHttpClientManager: (params?: {
     authorize(): Promise<UserReadResponse>;
 };
 
-export declare class WebSemaphoreWebsocketsClient {
+export declare class WebSemaphoreWebsocketsClient extends default_2 {
     private wsClient;
     private cache;
     logLevel: LogLevel;
@@ -827,11 +1190,68 @@ export declare class WebSemaphoreWebsocketsClient {
     acquire<T>({ semaphoreId, channelId, sync, body }: AcquireParams): Promise<{
         status: LockRequestStatus;
         payload: T;
+        jobCrn: string;
         release: () => void;
     }>;
     private log;
     private _processIncoming;
-    release({ semaphoreId, channelId, messageId }: ReleaseParams): void;
+    private jobAction;
+    release({ jobCrn }: JobActionParams): void;
+    requeue({ jobCrn }: JobActionParams): Promise<{
+        status: string;
+        jobCrn: string;
+        payload: string;
+        release: () => void;
+    }> | Promise<{
+        status: LockRequestStatus;
+        payload: unknown;
+        jobCrn: string;
+        release: () => void;
+    }>;
+    reschedule({ jobCrn }: JobActionParams): Promise<{
+        status: string;
+        jobCrn: string;
+        payload: string;
+        release: () => void;
+    }> | Promise<{
+        status: LockRequestStatus;
+        payload: unknown;
+        jobCrn: string;
+        release: () => void;
+    }>;
+    cancel({ jobCrn }: JobActionParams): Promise<{
+        status: string;
+        jobCrn: string;
+        payload: string;
+        release: () => void;
+    }> | Promise<{
+        status: LockRequestStatus;
+        payload: unknown;
+        jobCrn: string;
+        release: () => void;
+    }>;
+    archive({ jobCrn }: JobActionParams): Promise<{
+        status: string;
+        jobCrn: string;
+        payload: string;
+        release: () => void;
+    }> | Promise<{
+        status: LockRequestStatus;
+        payload: unknown;
+        jobCrn: string;
+        release: () => void;
+    }>;
+    delete({ jobCrn }: JobActionParams): Promise<{
+        status: string;
+        jobCrn: string;
+        payload: string;
+        release: () => void;
+    }> | Promise<{
+        status: LockRequestStatus;
+        payload: unknown;
+        jobCrn: string;
+        release: () => void;
+    }>;
     client(): WebSemaphoreWebsocketsTransportClient;
     setClient(client: WebSemaphoreWebsocketsTransportClient): void;
     getCache(): {
@@ -843,6 +1263,7 @@ export declare class WebSemaphoreWebsocketsClient {
 export declare const WebSemaphoreWebsocketsClientManager: (opts?: {
     websockets?: WebSocketImplementation;
     logLevel?: LogLevel;
+    baseUrl?: string;
 }) => {
     connect: (token: string) => Promise<WebSemaphoreWebsocketsClient>;
     disconnect: () => Promise<void>;
@@ -863,8 +1284,8 @@ declare class WebSemaphoreWebsocketsTransportClient extends EventEmitter {
     logLevel: LogLevel;
     constructor(upd: UpdateClientConfig, opts?: {
         websockets?: WebSocketImplementation;
-        url?: "";
-        env?: "";
+        url?: string;
+        env?: string;
         logLevel?: LogLevel;
     });
     private log;
