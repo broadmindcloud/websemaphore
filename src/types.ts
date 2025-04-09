@@ -24,6 +24,8 @@ export type WebSemaphoreClientOpts = { ws?: any };
 
 export type LockRequestStatus = "waiting" | "acquired" | "rejected";
 export type CacheItem = {
+    id: string,
+    jobCrn: string,
     promise: DelayedPromiseType,
     status: LockRequestStatus,
     // processIncoming: <T>(msg) => void

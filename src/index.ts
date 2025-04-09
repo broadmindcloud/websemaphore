@@ -9,5 +9,10 @@ export {
     WebSemaphoreWebsocketsClient,
 };
 
+import { Semaphore, SemaphoreJob, SemaphoreChannel, SemaphoreJobTimer, JOB_STATUS, Timer, TimeBucket } from "../../chainstream-domain-model/lib/semaphore"
+
+export { Semaphore, SemaphoreJob, SemaphoreChannel, SemaphoreJobTimer, JOB_STATUS, Timer, TimeBucket };
+
+
 export * from "./clients/http/api";
 
