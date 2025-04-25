@@ -155,6 +155,7 @@ export interface SemaphoreJobReadResponse {
       canOverrideRouting?: boolean;
       handler?: string;
       inputData?: string;
+      onError?: "suspend-channel" | "suspend-semaphore" | "drop" | "continue";
       maxExecutionTime?: number;
       language?: string;
       isActive?: boolean;
@@ -167,6 +168,15 @@ export interface SemaphoreJobReadResponse {
       value?: number;
       since?: string;
     };
+    routing?: {
+      headers?: Record<string, string>;
+      protocol?: string;
+      address?: string;
+      onError?: "suspend-channel" | "suspend-semaphore" | "drop" | "continue";
+      method?: string;
+      isActive?: boolean;
+      remoteId?: string;
+    }[];
     meta?: {
       jobCrnInjectionPoint?: string;
     };
@@ -226,6 +236,7 @@ export interface PagedSemaphoreListReadResponse {
       canOverrideRouting?: boolean;
       handler?: string;
       inputData?: string;
+      onError?: "suspend-channel" | "suspend-semaphore" | "drop" | "continue";
       maxExecutionTime?: number;
       language?: string;
       isActive?: boolean;
@@ -238,6 +249,15 @@ export interface PagedSemaphoreListReadResponse {
       value?: number;
       since?: string;
     };
+    routing?: {
+      headers?: Record<string, string>;
+      protocol?: string;
+      address?: string;
+      onError?: "suspend-channel" | "suspend-semaphore" | "drop" | "continue";
+      method?: string;
+      isActive?: boolean;
+      remoteId?: string;
+    }[];
     meta?: {
       jobCrnInjectionPoint?: string;
     };
@@ -274,6 +294,7 @@ export interface SemaphoreUpsertRequest {
     canOverrideRouting?: boolean;
     handler?: string;
     inputData?: string;
+    onError?: "suspend-channel" | "suspend-semaphore" | "drop" | "continue";
     maxExecutionTime?: number;
     language?: string;
     isActive?: boolean;
@@ -286,6 +307,15 @@ export interface SemaphoreUpsertRequest {
     value?: number;
     since?: string;
   };
+  routing?: {
+    headers?: Record<string, string>;
+    protocol?: string;
+    address?: string;
+    onError?: "suspend-channel" | "suspend-semaphore" | "drop" | "continue";
+    method?: string;
+    isActive?: boolean;
+    remoteId?: string;
+  }[];
   meta?: {
     jobCrnInjectionPoint?: string;
   };
@@ -318,6 +348,7 @@ export interface SemaphoreReadResponse {
     canOverrideRouting?: boolean;
     handler?: string;
     inputData?: string;
+    onError?: "suspend-channel" | "suspend-semaphore" | "drop" | "continue";
     maxExecutionTime?: number;
     language?: string;
     isActive?: boolean;
@@ -330,6 +361,15 @@ export interface SemaphoreReadResponse {
     value?: number;
     since?: string;
   };
+  routing?: {
+    headers?: Record<string, string>;
+    protocol?: string;
+    address?: string;
+    onError?: "suspend-channel" | "suspend-semaphore" | "drop" | "continue";
+    method?: string;
+    isActive?: boolean;
+    remoteId?: string;
+  }[];
   meta?: {
     jobCrnInjectionPoint?: string;
   };
@@ -379,6 +419,7 @@ export interface PagedSemaphoreReadQueueResponse {
         canOverrideRouting?: boolean;
         handler?: string;
         inputData?: string;
+        onError?: "suspend-channel" | "suspend-semaphore" | "drop" | "continue";
         maxExecutionTime?: number;
         language?: string;
         isActive?: boolean;
@@ -391,6 +432,15 @@ export interface PagedSemaphoreReadQueueResponse {
         value?: number;
         since?: string;
       };
+      routing?: {
+        headers?: Record<string, string>;
+        protocol?: string;
+        address?: string;
+        onError?: "suspend-channel" | "suspend-semaphore" | "drop" | "continue";
+        method?: string;
+        isActive?: boolean;
+        remoteId?: string;
+      }[];
       meta?: {
         jobCrnInjectionPoint?: string;
       };
@@ -738,7 +788,7 @@ export class HttpClient<SecurityDataType = unknown> {
 
 /**
  * @title websemaphore-openapi
- * @version 2025-04-03T13:14:42Z
+ * @version 2025-04-15T20:37:32Z
  * @baseUrl https://api-us-dev.websemaphore.com/v1
  */
 export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
@@ -1447,10 +1497,15 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
  * @request POST:/semaphore/{semaphoreId}/release
  * @secure
  */
-    release: (semaphoreId: string, params: RequestParams = {}) =>
+    release: (
+      semaphoreId: string,
+      SemaphoreJobStateTransformRequest: SemaphoreJobStateTransformRequest,
+      params: RequestParams = {},
+    ) =>
       this.request<void, void>({
         path: `/semaphore/${semaphoreId}/release`,
         method: "POST",
+        body: SemaphoreJobStateTransformRequest,
         secure: true,
         type: ContentType.Json,
         ...params,

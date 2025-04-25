@@ -108,8 +108,9 @@ export class WebSemaphoreWebsocketsClient extends EventEmitter {
       this.cache.historyIndex[o.jobCrn] = cached;
 
       this.log("Acquired job ", o.jobCrn)
-      this.log("Payload ", o.payload)
       this.log("Correlation id ", o.payload.id)
+
+      // this.log("Payload ", o.payload)
 
       if (!cached) {
         debugger;
