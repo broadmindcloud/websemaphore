@@ -125,6 +125,27 @@ export interface StripeCheckoutSessionCreateRequest {
   priceId?: string;
 }
 
+/** SemaphoreChannelsListResponse Model */
+export interface SemaphoreChannelsListResponse {
+  Items?: {
+    semaphoreId?: string;
+    isActive?: boolean;
+    lockValue?: number;
+    channelId?: string;
+  }[];
+  Count?: number;
+  ScannedCount?: number;
+  LastEvaluatedKey?: string;
+}
+
+/** SemaphoreChannelReadResponse Model */
+export interface SemaphoreChannelReadResponse {
+  semaphoreId?: string;
+  isActive?: boolean;
+  lockValue?: number;
+  channelId?: string;
+}
+
 /** SemaphoreSyncLockResponse Model */
 export interface SemaphoreSyncLockResponse {
   semaphoreId: string;
@@ -224,7 +245,6 @@ export interface SemaphoreJobReadResponse {
 export interface SemaphoreLockRequest {
   id?: string;
   body?: string;
-  crn?: string;
   channelId?: string;
 }
 
@@ -494,9 +514,7 @@ export interface SemaphoreJobStateTransformRequest {
 }
 
 /** SemaphoreChannel Model */
-export interface SemaphoreChannel {
-  channelId?: string;
-}
+export type SemaphoreChannel = any;
 
 export interface EmailUpsertResponse {
   /** @default false */
@@ -788,7 +806,7 @@ export class HttpClient<SecurityDataType = unknown> {
 
 /**
  * @title websemaphore-openapi
- * @version 2025-04-15T20:37:32Z
+ * @version 2025-05-06T09:24:49Z
  * @baseUrl https://api-us-dev.websemaphore.com/v1
  */
 export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
@@ -980,7 +998,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request GET:/info
      */
     infoList: (params: RequestParams = {}) =>
-      this.request<void, any>({
+      this.request<void, SemaphoreChannel>({
         path: `/info`,
         method: "GET",
         type: ContentType.Json,
@@ -1324,6 +1342,93 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       }),
 
     /**
+     * No description
+     *
+     * @tags clientAlias#readChannel, publicApi
+     * @name ReadChannel
+     * @summary Returns a semaphore's queue contents
+     * @request GET:/semaphore/{semaphoreId}/channel
+     * @secure
+     */
+    readChannel: (
+      semaphoreId: string,
+      query?: {
+        channelId?: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<SemaphoreChannelReadResponse, ErrorResponse>({
+        path: `/semaphore/${semaphoreId}/channel`,
+        method: "GET",
+        query: query,
+        secure: true,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @name OptionsSemaphore7
+     * @request OPTIONS:/semaphore/{semaphoreId}/channel
+     * @originalName optionsSemaphore
+     * @duplicate
+     */
+    optionsSemaphore7: (semaphoreId: string, params: RequestParams = {}) =>
+      this.request<void, any>({
+        path: `/semaphore/${semaphoreId}/channel`,
+        method: "OPTIONS",
+        type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags clientAlias#listChannels, publicApi
+     * @name ListChannels
+     * @summary Returns a semaphore's queue contents
+     * @request GET:/semaphore/{semaphoreId}/channels
+     * @secure
+     */
+    listChannels: (
+      semaphoreId: string,
+      query?: {
+        status?: string;
+        limit?: string;
+        channelId?: string;
+        startKey?: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<SemaphoreChannelsListResponse, ErrorResponse>({
+        path: `/semaphore/${semaphoreId}/channels`,
+        method: "GET",
+        query: query,
+        secure: true,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @name OptionsSemaphore8
+     * @request OPTIONS:/semaphore/{semaphoreId}/channels
+     * @originalName optionsSemaphore
+     * @duplicate
+     */
+    optionsSemaphore8: (semaphoreId: string, params: RequestParams = {}) =>
+      this.request<void, any>({
+        path: `/semaphore/${semaphoreId}/channels`,
+        method: "OPTIONS",
+        type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
  * No description
  *
  * @tags clientAlias#delete, publicApi
@@ -1351,12 +1456,12 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
-     * @name OptionsSemaphore7
+     * @name OptionsSemaphore9
      * @request OPTIONS:/semaphore/{semaphoreId}/delete
      * @originalName optionsSemaphore
      * @duplicate
      */
-    optionsSemaphore7: (semaphoreId: string, params: RequestParams = {}) =>
+    optionsSemaphore9: (semaphoreId: string, params: RequestParams = {}) =>
       this.request<void, any>({
         path: `/semaphore/${semaphoreId}/delete`,
         method: "OPTIONS",
@@ -1393,12 +1498,12 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
-     * @name OptionsSemaphore8
+     * @name OptionsSemaphore10
      * @request OPTIONS:/semaphore/{semaphoreId}/job
      * @originalName optionsSemaphore
      * @duplicate
      */
-    optionsSemaphore8: (semaphoreId: string, params: RequestParams = {}) =>
+    optionsSemaphore10: (semaphoreId: string, params: RequestParams = {}) =>
       this.request<void, any>({
         path: `/semaphore/${semaphoreId}/job`,
         method: "OPTIONS",
@@ -1415,10 +1520,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request DELETE:/semaphore/{semaphoreId}/purge
      * @secure
      */
-    purgeQueue: (semaphoreId: string, params: RequestParams = {}) =>
+    purgeQueue: (semaphoreId: string, SemaphoreChannel: SemaphoreChannel, params: RequestParams = {}) =>
       this.request<OkResponse, ErrorResponse>({
         path: `/semaphore/${semaphoreId}/purge`,
         method: "DELETE",
+        body: SemaphoreChannel,
         secure: true,
         type: ContentType.Json,
         format: "json",
@@ -1428,12 +1534,12 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
-     * @name OptionsSemaphore9
+     * @name OptionsSemaphore11
      * @request OPTIONS:/semaphore/{semaphoreId}/purge
      * @originalName optionsSemaphore
      * @duplicate
      */
-    optionsSemaphore9: (semaphoreId: string, params: RequestParams = {}) =>
+    optionsSemaphore11: (semaphoreId: string, params: RequestParams = {}) =>
       this.request<void, any>({
         path: `/semaphore/${semaphoreId}/purge`,
         method: "OPTIONS",
@@ -1455,6 +1561,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       query?: {
         status?: string;
         limit?: string;
+        channelId?: string;
         pageSize?: string;
         startKey?: string;
       },
@@ -1473,12 +1580,12 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
-     * @name OptionsSemaphore10
+     * @name OptionsSemaphore12
      * @request OPTIONS:/semaphore/{semaphoreId}/readQueue
      * @originalName optionsSemaphore
      * @duplicate
      */
-    optionsSemaphore10: (semaphoreId: string, params: RequestParams = {}) =>
+    optionsSemaphore12: (semaphoreId: string, params: RequestParams = {}) =>
       this.request<void, any>({
         path: `/semaphore/${semaphoreId}/readQueue`,
         method: "OPTIONS",
@@ -1514,12 +1621,12 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
-     * @name OptionsSemaphore11
+     * @name OptionsSemaphore13
      * @request OPTIONS:/semaphore/{semaphoreId}/release
      * @originalName optionsSemaphore
      * @duplicate
      */
-    optionsSemaphore11: (semaphoreId: string, params: RequestParams = {}) =>
+    optionsSemaphore13: (semaphoreId: string, params: RequestParams = {}) =>
       this.request<void, any>({
         path: `/semaphore/${semaphoreId}/release`,
         method: "OPTIONS",
@@ -1555,12 +1662,12 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
-     * @name OptionsSemaphore12
+     * @name OptionsSemaphore14
      * @request OPTIONS:/semaphore/{semaphoreId}/requeue
      * @originalName optionsSemaphore
      * @duplicate
      */
-    optionsSemaphore12: (semaphoreId: string, params: RequestParams = {}) =>
+    optionsSemaphore14: (semaphoreId: string, params: RequestParams = {}) =>
       this.request<void, any>({
         path: `/semaphore/${semaphoreId}/requeue`,
         method: "OPTIONS",
@@ -1596,12 +1703,12 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
-     * @name OptionsSemaphore13
+     * @name OptionsSemaphore15
      * @request OPTIONS:/semaphore/{semaphoreId}/reschedule
      * @originalName optionsSemaphore
      * @duplicate
      */
-    optionsSemaphore13: (semaphoreId: string, params: RequestParams = {}) =>
+    optionsSemaphore15: (semaphoreId: string, params: RequestParams = {}) =>
       this.request<void, any>({
         path: `/semaphore/${semaphoreId}/reschedule`,
         method: "OPTIONS",

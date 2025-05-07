@@ -11,11 +11,14 @@ export class WebSemaphoreWebsocketsTransportClient extends EventEmitter {
     private pingCounter: number = 0;
     private outboundQueue: any[] = [];
     private token: string = "";
+    private urlWithToken: string = "";
     private url: string = "";
     private noReconnect: boolean = false;
     private upd: UpdateClientConfig;
     private WSImplementation: WebSocketImplementation;
     public logLevel: LogLevel = "";
+
+    private flushedPromise?: typeof DelayedPromise<void>;
 
     constructor(
         upd: UpdateClientConfig,
@@ -51,7 +54,7 @@ export class WebSemaphoreWebsocketsTransportClient extends EventEmitter {
 
     isConnected() {
         // debugger;
-        this.log("Ready state: ", this.socket?.readyState);
+        // this.log("Ready state: ", this.socket?.readyState);
         return this.socket && (this.socket.readyState === this.socket.OPEN);
     }
 
@@ -99,8 +102,10 @@ export class WebSemaphoreWebsocketsTransportClient extends EventEmitter {
     boundListeners: { name: string, handler: EventListener }[] = [];
 
     private removeEventListeners() {
-        if (!this.socket)
-            throw new Error("Socket is not available");
+        if (!this.socket) {
+            this.log("WARNING: Socket is not available when removing event listeners");
+            return;
+        }
 
         this.boundListeners.forEach(l =>
             this.socket?.removeEventListener(l.name, l.handler)
@@ -127,29 +132,55 @@ export class WebSemaphoreWebsocketsTransportClient extends EventEmitter {
         this.noReconnect = false;
     }
 
+    public async connect() {
+        if (this.socket) 
+            return console.warn("WARNING: Already connected, skipping .connect()");
+
+        this.log("Connecting. Will wait to flush:", this.flushedPromise)
+        if(this.flushedPromise)
+            await this.flushedPromise;
+
+        this.socket = new this.WSImplementation(this.urlWithToken);
+        this.addEventListeners();
+
+        this.log("Connected: ", this.urlWithToken);
+
+        await new Promise((res) => {
+            res(this.url);
+        });
+    }
+
     public async toggle(token: string = "") {
         this.token = token;
         const url = this.upd(this.url, this.token);
 
         const togglingOff = !token;
 
+        debugger;
+
         this.log("Websemaphore Websockets connection is toggling", togglingOff ? "off" : "on");
 
-
-        if (this.url === url && token == this.token && this.socket?.readyState === this.socket?.OPEN) {
+        if (this.url === url && token == this.token && this.isConnected()) { //(this.url === url && token == this.token && this.socket?.readyState === this.socket?.OPEN) {
+            console.log("Already connected, skipping")
             return;
         }
 
-        this.url = url;
+        if(token)
+            this.urlWithToken = url;
 
+        this.log("Closing: Flushing")
         if(togglingOff)
-            await this.flush()
+            await this.flush();
         
-        if (this.socket) {
+        this.log("Closing: Closing socket")
+        if (togglingOff && this.socket) {
             this.socket.close();
+            this.socket = null;
+            console.log("Toggle closed websocket")
         } else {
-            this.socket = new this.WSImplementation(this.url);
-            this.addEventListeners();
+            await this.connect();
+            // this.socket = new this.WSImplementation(this.url);
+            // this.addEventListeners();
         }
 
         return Promise.resolve();
@@ -170,7 +201,13 @@ export class WebSemaphoreWebsocketsTransportClient extends EventEmitter {
     }
 
     async flush() {        
-        const flushedPromise = DelayedPromise<void>();
+        if(this.flushedPromise) {
+            console.warn("Flush in progress. Waiting for it to finish");
+            return await this.flushedPromise;
+        }
+
+        const flushedPromise = this.flushedPromise = DelayedPromise<void>() as any;
+
         const sock = this.socket;
 
         let count = 0;
@@ -184,18 +221,21 @@ export class WebSemaphoreWebsocketsTransportClient extends EventEmitter {
 
         const resolveWhenDone = () => {
             this.log("Flushing #", count++)
-            if (!this.isConnected())
+            if (!this.isConnected()) {
+                this.flushedPromise = undefined;
                 return flushedPromise.resolve();
+            }
 
             const ba = sock?.bufferedAmount;
             if (ba) {
                 this.log("Items in buffer #", count++)
                 setTimeout(() => {
                     resolveWhenDone()
-                }, 500);
+                }, 10);
             }
             else {
                 this.log("ResolveWhenDone Done")
+                this.flushedPromise = undefined;
                 flushedPromise.resolve();
             }
         }

@@ -54,7 +54,7 @@ export class WebSemaphoreWebsocketsClient extends EventEmitter {
   }
 
 
-  acquire<T>({ semaphoreId, channelId, sync, body }: AcquireParams) {
+  acquire<T>({ semaphoreId, channelId, sync, body }: AcquireParams, opts?: { noWait?: boolean }) {
     // this.asssertIsConnected();
 
     let counter = 0;
@@ -107,8 +107,8 @@ export class WebSemaphoreWebsocketsClient extends EventEmitter {
       const cached = this.cache.inFlight[o.payload.id];
       this.cache.historyIndex[o.jobCrn] = cached;
 
-      this.log("Acquired job ", o.jobCrn)
-      this.log("Correlation id ", o.payload.id)
+      this.log("Acquired job: ", o.jobCrn)
+      this.log("Correlation id: ", o.payload.id)
 
       // this.log("Payload ", o.payload)
 

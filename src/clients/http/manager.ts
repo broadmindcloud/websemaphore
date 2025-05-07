@@ -38,6 +38,8 @@ export const WebSemaphoreHttpClientManager = (params?: {  baseUrl?: string, toke
     return client;
   };
 
+  initialize(params);
+
   return {
     initialize,
     getCurrentToken() {

@@ -1,5 +1,12 @@
 import { default as default_2 } from 'eventemitter3';
 import { EventEmitter } from 'eventemitter3';
+import { JOB_STATUS } from '../../chainstream-domain-model/lib/semaphore';
+import { Semaphore } from '../../chainstream-domain-model/lib/semaphore';
+import { SemaphoreChannel } from '../../chainstream-domain-model/lib/semaphore';
+import { SemaphoreJob } from '../../chainstream-domain-model/lib/semaphore';
+import { SemaphoreJobTimer } from '../../chainstream-domain-model/lib/semaphore';
+import { TimeBucket } from '../../chainstream-domain-model/lib/semaphore';
+import { Timer } from '../../chainstream-domain-model/lib/semaphore';
 
 declare type AcquireParams = {
     semaphoreId: string;
@@ -12,7 +19,7 @@ export declare type AnyResponse = object;
 
 /**
  * @title websemaphore-openapi
- * @version 2025-04-03T13:14:42Z
+ * @version 2025-05-06T09:24:49Z
  * @baseUrl https://api-us-dev.websemaphore.com/v1
  */
 export declare class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
@@ -268,7 +275,7 @@ export declare class Api<SecurityDataType extends unknown> extends HttpClient<Se
          * @request POST:/semaphore/{semaphoreId}/activate
          * @secure
          */
-        activate: (semaphoreId: string, SemaphoreChannel: SemaphoreChannel, params?: RequestParams) => Promise<HttpResponse<OkResponse, ErrorResponse>>;
+        activate: (semaphoreId: string, SemaphoreChannel: SemaphoreChannel_2, params?: RequestParams) => Promise<HttpResponse<OkResponse, ErrorResponse>>;
         /**
          * No description
          *
@@ -302,6 +309,51 @@ export declare class Api<SecurityDataType extends unknown> extends HttpClient<Se
         /**
          * No description
          *
+         * @tags clientAlias#readChannel, publicApi
+         * @name ReadChannel
+         * @summary Returns a semaphore's queue contents
+         * @request GET:/semaphore/{semaphoreId}/channel
+         * @secure
+         */
+        readChannel: (semaphoreId: string, query?: {
+            channelId?: string;
+        }, params?: RequestParams) => Promise<HttpResponse<SemaphoreChannelReadResponse, ErrorResponse>>;
+        /**
+         * No description
+         *
+         * @name OptionsSemaphore7
+         * @request OPTIONS:/semaphore/{semaphoreId}/channel
+         * @originalName optionsSemaphore
+         * @duplicate
+         */
+        optionsSemaphore7: (semaphoreId: string, params?: RequestParams) => Promise<HttpResponse<void, any>>;
+        /**
+         * No description
+         *
+         * @tags clientAlias#listChannels, publicApi
+         * @name ListChannels
+         * @summary Returns a semaphore's queue contents
+         * @request GET:/semaphore/{semaphoreId}/channels
+         * @secure
+         */
+        listChannels: (semaphoreId: string, query?: {
+            status?: string;
+            limit?: string;
+            channelId?: string;
+            startKey?: string;
+        }, params?: RequestParams) => Promise<HttpResponse<SemaphoreChannelsListResponse, ErrorResponse>>;
+        /**
+         * No description
+         *
+         * @name OptionsSemaphore8
+         * @request OPTIONS:/semaphore/{semaphoreId}/channels
+         * @originalName optionsSemaphore
+         * @duplicate
+         */
+        optionsSemaphore8: (semaphoreId: string, params?: RequestParams) => Promise<HttpResponse<void, any>>;
+        /**
+         * No description
+         *
          * @tags clientAlias#delete, publicApi
          * @name Delete
          * @summary Asynchronously delete a semaphore lock.
@@ -314,12 +366,12 @@ export declare class Api<SecurityDataType extends unknown> extends HttpClient<Se
         /**
          * No description
          *
-         * @name OptionsSemaphore7
+         * @name OptionsSemaphore9
          * @request OPTIONS:/semaphore/{semaphoreId}/delete
          * @originalName optionsSemaphore
          * @duplicate
          */
-        optionsSemaphore7: (semaphoreId: string, params?: RequestParams) => Promise<HttpResponse<void, any>>;
+        optionsSemaphore9: (semaphoreId: string, params?: RequestParams) => Promise<HttpResponse<void, any>>;
         /**
          * No description
          *
@@ -335,12 +387,12 @@ export declare class Api<SecurityDataType extends unknown> extends HttpClient<Se
         /**
          * No description
          *
-         * @name OptionsSemaphore8
+         * @name OptionsSemaphore10
          * @request OPTIONS:/semaphore/{semaphoreId}/job
          * @originalName optionsSemaphore
          * @duplicate
          */
-        optionsSemaphore8: (semaphoreId: string, params?: RequestParams) => Promise<HttpResponse<void, any>>;
+        optionsSemaphore10: (semaphoreId: string, params?: RequestParams) => Promise<HttpResponse<void, any>>;
         /**
          * No description
          *
@@ -350,16 +402,16 @@ export declare class Api<SecurityDataType extends unknown> extends HttpClient<Se
          * @request DELETE:/semaphore/{semaphoreId}/purge
          * @secure
          */
-        purgeQueue: (semaphoreId: string, params?: RequestParams) => Promise<HttpResponse<OkResponse, ErrorResponse>>;
+        purgeQueue: (semaphoreId: string, SemaphoreChannel: SemaphoreChannel_2, params?: RequestParams) => Promise<HttpResponse<OkResponse, ErrorResponse>>;
         /**
          * No description
          *
-         * @name OptionsSemaphore9
+         * @name OptionsSemaphore11
          * @request OPTIONS:/semaphore/{semaphoreId}/purge
          * @originalName optionsSemaphore
          * @duplicate
          */
-        optionsSemaphore9: (semaphoreId: string, params?: RequestParams) => Promise<HttpResponse<void, any>>;
+        optionsSemaphore11: (semaphoreId: string, params?: RequestParams) => Promise<HttpResponse<void, any>>;
         /**
          * No description
          *
@@ -372,18 +424,19 @@ export declare class Api<SecurityDataType extends unknown> extends HttpClient<Se
         readQueue: (semaphoreId: string, query?: {
             status?: string;
             limit?: string;
+            channelId?: string;
             pageSize?: string;
             startKey?: string;
         }, params?: RequestParams) => Promise<HttpResponse<PagedSemaphoreReadQueueResponse, ErrorResponse>>;
         /**
          * No description
          *
-         * @name OptionsSemaphore10
+         * @name OptionsSemaphore12
          * @request OPTIONS:/semaphore/{semaphoreId}/readQueue
          * @originalName optionsSemaphore
          * @duplicate
          */
-        optionsSemaphore10: (semaphoreId: string, params?: RequestParams) => Promise<HttpResponse<void, any>>;
+        optionsSemaphore12: (semaphoreId: string, params?: RequestParams) => Promise<HttpResponse<void, any>>;
         /**
          * No description
          *
@@ -395,16 +448,16 @@ export declare class Api<SecurityDataType extends unknown> extends HttpClient<Se
          * @request POST:/semaphore/{semaphoreId}/release
          * @secure
          */
-        release: (semaphoreId: string, params?: RequestParams) => Promise<HttpResponse<void, void>>;
+        release: (semaphoreId: string, SemaphoreJobStateTransformRequest: SemaphoreJobStateTransformRequest, params?: RequestParams) => Promise<HttpResponse<void, void>>;
         /**
          * No description
          *
-         * @name OptionsSemaphore11
+         * @name OptionsSemaphore13
          * @request OPTIONS:/semaphore/{semaphoreId}/release
          * @originalName optionsSemaphore
          * @duplicate
          */
-        optionsSemaphore11: (semaphoreId: string, params?: RequestParams) => Promise<HttpResponse<void, any>>;
+        optionsSemaphore13: (semaphoreId: string, params?: RequestParams) => Promise<HttpResponse<void, any>>;
         /**
          * No description
          *
@@ -420,12 +473,12 @@ export declare class Api<SecurityDataType extends unknown> extends HttpClient<Se
         /**
          * No description
          *
-         * @name OptionsSemaphore12
+         * @name OptionsSemaphore14
          * @request OPTIONS:/semaphore/{semaphoreId}/requeue
          * @originalName optionsSemaphore
          * @duplicate
          */
-        optionsSemaphore12: (semaphoreId: string, params?: RequestParams) => Promise<HttpResponse<void, any>>;
+        optionsSemaphore14: (semaphoreId: string, params?: RequestParams) => Promise<HttpResponse<void, any>>;
         /**
          * No description
          *
@@ -441,12 +494,12 @@ export declare class Api<SecurityDataType extends unknown> extends HttpClient<Se
         /**
          * No description
          *
-         * @name OptionsSemaphore13
+         * @name OptionsSemaphore15
          * @request OPTIONS:/semaphore/{semaphoreId}/reschedule
          * @originalName optionsSemaphore
          * @duplicate
          */
-        optionsSemaphore13: (semaphoreId: string, params?: RequestParams) => Promise<HttpResponse<void, any>>;
+        optionsSemaphore15: (semaphoreId: string, params?: RequestParams) => Promise<HttpResponse<void, any>>;
     };
     user: {
         /**
@@ -610,12 +663,20 @@ export declare interface ApikeyUpsertResponse {
 }
 
 declare type CacheItem = {
+    id: string;
+    jobCrn: string;
     promise: DelayedPromiseType;
     status: LockRequestStatus;
     release: () => void;
 };
 
 declare type CancelToken = Symbol | string | number;
+
+declare type ClientManagerParams = {
+    websockets?: WebSocketImplementation;
+    logLevel?: LogLevel;
+    baseUrl?: string;
+};
 
 export declare enum ContentType {
     Json = "application/json",
@@ -707,6 +768,8 @@ export declare interface IdSessionTokenRequest {
     id: string;
 }
 
+export { JOB_STATUS }
+
 declare type JobActionParams = {
     jobCrn: string;
 };
@@ -727,6 +790,7 @@ export declare interface PagedSemaphoreListReadResponse {
             canOverrideRouting?: boolean;
             handler?: string;
             inputData?: string;
+            onError?: "suspend-channel" | "suspend-semaphore" | "drop" | "continue";
             maxExecutionTime?: number;
             language?: string;
             isActive?: boolean;
@@ -739,6 +803,15 @@ export declare interface PagedSemaphoreListReadResponse {
             value?: number;
             since?: string;
         };
+        routing?: {
+            headers?: Record<string, string>;
+            protocol?: string;
+            address?: string;
+            onError?: "suspend-channel" | "suspend-semaphore" | "drop" | "continue";
+            method?: string;
+            isActive?: boolean;
+            remoteId?: string;
+        }[];
         meta?: {
             jobCrnInjectionPoint?: string;
         };
@@ -792,6 +865,7 @@ export declare interface PagedSemaphoreReadQueueResponse {
                 canOverrideRouting?: boolean;
                 handler?: string;
                 inputData?: string;
+                onError?: "suspend-channel" | "suspend-semaphore" | "drop" | "continue";
                 maxExecutionTime?: number;
                 language?: string;
                 isActive?: boolean;
@@ -804,6 +878,15 @@ export declare interface PagedSemaphoreReadQueueResponse {
                 value?: number;
                 since?: string;
             };
+            routing?: {
+                headers?: Record<string, string>;
+                protocol?: string;
+                address?: string;
+                onError?: "suspend-channel" | "suspend-semaphore" | "drop" | "continue";
+                method?: string;
+                isActive?: boolean;
+                remoteId?: string;
+            }[];
             meta?: {
                 jobCrnInjectionPoint?: string;
             };
@@ -857,10 +940,35 @@ export declare type RequestParams = Omit<FullRequestParams, "body" | "method" | 
 
 export declare type ResponseFormat = keyof Omit<Body, "body" | "bodyUsed">;
 
+export { Semaphore }
+
+export { SemaphoreChannel }
+
 /** SemaphoreChannel Model */
-export declare interface SemaphoreChannel {
+declare type SemaphoreChannel_2 = any;
+
+/** SemaphoreChannelReadResponse Model */
+export declare interface SemaphoreChannelReadResponse {
+    semaphoreId?: string;
+    isActive?: boolean;
+    lockValue?: number;
     channelId?: string;
 }
+
+/** SemaphoreChannelsListResponse Model */
+export declare interface SemaphoreChannelsListResponse {
+    Items?: {
+        semaphoreId?: string;
+        isActive?: boolean;
+        lockValue?: number;
+        channelId?: string;
+    }[];
+    Count?: number;
+    ScannedCount?: number;
+    LastEvaluatedKey?: string;
+}
+
+export { SemaphoreJob }
 
 /** SemaphoreJobReadResponse Model */
 export declare interface SemaphoreJobReadResponse {
@@ -885,6 +993,7 @@ export declare interface SemaphoreJobReadResponse {
             canOverrideRouting?: boolean;
             handler?: string;
             inputData?: string;
+            onError?: "suspend-channel" | "suspend-semaphore" | "drop" | "continue";
             maxExecutionTime?: number;
             language?: string;
             isActive?: boolean;
@@ -897,6 +1006,15 @@ export declare interface SemaphoreJobReadResponse {
             value?: number;
             since?: string;
         };
+        routing?: {
+            headers?: Record<string, string>;
+            protocol?: string;
+            address?: string;
+            onError?: "suspend-channel" | "suspend-semaphore" | "drop" | "continue";
+            method?: string;
+            isActive?: boolean;
+            remoteId?: string;
+        }[];
         meta?: {
             jobCrnInjectionPoint?: string;
         };
@@ -945,11 +1063,12 @@ export declare interface SemaphoreJobStateTransformRequest {
     jobCrn?: string;
 }
 
+export { SemaphoreJobTimer }
+
 /** SemaphoreLockRequest Model */
 export declare interface SemaphoreLockRequest {
     id?: string;
     body?: string;
-    crn?: string;
     channelId?: string;
 }
 
@@ -960,6 +1079,7 @@ export declare interface SemaphoreReadResponse {
         canOverrideRouting?: boolean;
         handler?: string;
         inputData?: string;
+        onError?: "suspend-channel" | "suspend-semaphore" | "drop" | "continue";
         maxExecutionTime?: number;
         language?: string;
         isActive?: boolean;
@@ -972,6 +1092,15 @@ export declare interface SemaphoreReadResponse {
         value?: number;
         since?: string;
     };
+    routing?: {
+        headers?: Record<string, string>;
+        protocol?: string;
+        address?: string;
+        onError?: "suspend-channel" | "suspend-semaphore" | "drop" | "continue";
+        method?: string;
+        isActive?: boolean;
+        remoteId?: string;
+    }[];
     meta?: {
         jobCrnInjectionPoint?: string;
     };
@@ -1011,6 +1140,7 @@ export declare interface SemaphoreUpsertRequest {
         canOverrideRouting?: boolean;
         handler?: string;
         inputData?: string;
+        onError?: "suspend-channel" | "suspend-semaphore" | "drop" | "continue";
         maxExecutionTime?: number;
         language?: string;
         isActive?: boolean;
@@ -1023,6 +1153,15 @@ export declare interface SemaphoreUpsertRequest {
         value?: number;
         since?: string;
     };
+    routing?: {
+        headers?: Record<string, string>;
+        protocol?: string;
+        address?: string;
+        onError?: "suspend-channel" | "suspend-semaphore" | "drop" | "continue";
+        method?: string;
+        isActive?: boolean;
+        remoteId?: string;
+    }[];
     meta?: {
         jobCrnInjectionPoint?: string;
     };
@@ -1059,6 +1198,10 @@ export declare interface StripeCheckoutSessionCreateRequest {
 }
 
 export declare type StripeCheckoutSessionCreateResponse = object;
+
+export { TimeBucket }
+
+export { Timer }
 
 declare type UpdateClientConfig = (wsServer: string, token: string) => string;
 
@@ -1187,89 +1330,90 @@ export declare class WebSemaphoreWebsocketsClient extends default_2 {
     private cache;
     logLevel: LogLevel;
     constructor(opts: ApiConstructorParams);
-    acquire<T>({ semaphoreId, channelId, sync, body }: AcquireParams): Promise<{
+    acquire<T>({ semaphoreId, channelId, sync, body }: AcquireParams, opts?: {
+        noWait?: boolean;
+    }): Promise<{
         status: LockRequestStatus;
         payload: T;
         jobCrn: string;
-        release: () => void;
+        release: () => Promise<any>;
     }>;
     private log;
     private _processIncoming;
     private jobAction;
-    release({ jobCrn }: JobActionParams): void;
+    release({ jobCrn }: {
+        jobCrn: string;
+    }): Promise<any>;
     requeue({ jobCrn }: JobActionParams): Promise<{
+        promise: void;
         status: string;
         jobCrn: string;
         payload: string;
-        release: () => void;
+        release: () => Promise<void>;
     }> | Promise<{
         status: LockRequestStatus;
         payload: unknown;
         jobCrn: string;
-        release: () => void;
+        release: () => Promise<any>;
     }>;
     reschedule({ jobCrn }: JobActionParams): Promise<{
+        promise: void;
         status: string;
         jobCrn: string;
         payload: string;
-        release: () => void;
+        release: () => Promise<void>;
     }> | Promise<{
         status: LockRequestStatus;
         payload: unknown;
         jobCrn: string;
-        release: () => void;
+        release: () => Promise<any>;
     }>;
     cancel({ jobCrn }: JobActionParams): Promise<{
+        promise: void;
         status: string;
         jobCrn: string;
         payload: string;
-        release: () => void;
+        release: () => Promise<void>;
     }> | Promise<{
         status: LockRequestStatus;
         payload: unknown;
         jobCrn: string;
-        release: () => void;
+        release: () => Promise<any>;
     }>;
     archive({ jobCrn }: JobActionParams): Promise<{
+        promise: void;
         status: string;
         jobCrn: string;
         payload: string;
-        release: () => void;
+        release: () => Promise<void>;
     }> | Promise<{
         status: LockRequestStatus;
         payload: unknown;
         jobCrn: string;
-        release: () => void;
+        release: () => Promise<any>;
     }>;
     delete({ jobCrn }: JobActionParams): Promise<{
+        promise: void;
         status: string;
         jobCrn: string;
         payload: string;
-        release: () => void;
+        release: () => Promise<void>;
     }> | Promise<{
         status: LockRequestStatus;
         payload: unknown;
         jobCrn: string;
-        release: () => void;
+        release: () => Promise<any>;
     }>;
     client(): WebSemaphoreWebsocketsTransportClient;
     setClient(client: WebSemaphoreWebsocketsTransportClient): void;
     getCache(): {
         inFlight: Record<string, CacheItem>;
         history: string[];
+        historyIndex: Record<string, CacheItem>;
     };
 }
 
-export declare const WebSemaphoreWebsocketsClientManager: (opts?: {
-    websockets?: WebSocketImplementation;
-    logLevel?: LogLevel;
-    baseUrl?: string;
-}) => {
-    connect: (token: string) => Promise<WebSemaphoreWebsocketsClient>;
-    disconnect: () => Promise<void>;
-    wsClient: WebSemaphoreWebsocketsTransportClient;
-    client: WebSemaphoreWebsocketsClient;
-};
+export declare const WebSemaphoreWebsocketsClientManager: (opts: ClientManagerParams) => WebsocketsClientManager;
 
 declare class WebSemaphoreWebsocketsTransportClient extends EventEmitter {
     socket: WebSocket | null;
@@ -1277,11 +1421,13 @@ declare class WebSemaphoreWebsocketsTransportClient extends EventEmitter {
     private pingCounter;
     private outboundQueue;
     private token;
+    private urlWithToken;
     private url;
     private noReconnect;
     private upd;
     private WSImplementation;
     logLevel: LogLevel;
+    private flushedPromise?;
     constructor(upd: UpdateClientConfig, opts?: {
         websockets?: WebSocketImplementation;
         url?: string;
@@ -1302,13 +1448,26 @@ declare class WebSemaphoreWebsocketsTransportClient extends EventEmitter {
     private removeEventListeners;
     private forwardEvents;
     private onClose;
+    connect(): Promise<void>;
     toggle(token?: string): Promise<void>;
     send(msg: any): void;
-    flush(): Promise<void>;
+    flush(): Promise<any>;
 }
 
 declare type WebSocketImplementation = {
     new (...args: any[]): WebSocket;
 };
+
+declare class WebsocketsClientManager {
+    private _wsClient;
+    private _client;
+    opts: ClientManagerParams;
+    constructor(opts: ClientManagerParams);
+    connect(token: string): Promise<WebSemaphoreWebsocketsClient>;
+    disconnect(): Promise<void>;
+    reconnect(): Promise<void>;
+    get wsClient(): WebSemaphoreWebsocketsTransportClient;
+    get client(): WebSemaphoreWebsocketsClient;
+}
 
 export { }

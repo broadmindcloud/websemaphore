@@ -24,7 +24,7 @@ export class WebsocketsClientManager {
 
     async connect(token: string): Promise<WebSemaphoreWebsocketsClient> {
         if (!token || !token.replace(/^ApiKey./, ""))
-            throw new Error("Couldn't connect (did you pass a token?)");
+            throw new Error("Couldn't connect (did you pass a token and prefix it with ApiKey as in \"ApiKey <token>\"?)");
 
         const connectPromise = DelayedPromise<WebSemaphoreWebsocketsClient>();
 
@@ -49,8 +49,14 @@ export class WebsocketsClientManager {
         return connectPromise;
     }
 
-    disconnect(): Promise<void> {
-        return this.wsClient.toggle();
+    async disconnect(): Promise<void> {
+        debugger;
+        return await this.wsClient.toggle();
+    }
+
+    reconnect(): Promise<void> {
+        console.log("Reconnecting wsClient")
+        return this.wsClient.connect();
     }
 
     get wsClient(): WebSemaphoreWebsocketsTransportClient {

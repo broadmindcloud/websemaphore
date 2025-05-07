@@ -1,10 +1,13 @@
 <%
-const { route, utils, config } = it;
+const { route, utils, config, routeInfo } = it;
+const { tags } = routeInfo;
 const { _, pascalCase, require } = utils;
 const { query, payload, pathParams, headers } = route.request;
 
 const routeDocs = includeFile("@base/route-docs", { config, route, utils });
 const routeNamespace = pascalCase(route.routeName.usage);
+
+const bodyIsOptional = tags?.find(t => t.startsWith("optonalBody"));
 
 %>
 /**
